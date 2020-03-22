@@ -1,34 +1,68 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
+import Component from './Component';
 
-export default class Form extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: '' };
+const Form = () => {
+    const [ownerState, setOwnerState] = useState({
+        owner: '',
+        description: '',
+    });
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    const handleOwnerChange = (e) => setOwnerState({
+        ...ownerState,
+        [e.target.name]: [e.target.value],
+    });
 
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
+    const blankcomponent = { name: '', age: '' };
+    const [componentState, setcomponentState] = useState([
+        { ...blankcomponent },
+    ]);
 
-    handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
-    }
+    const addcomponent = () => {
+        setcomponentState([...componentState, { ...blankcomponent }]);
+    };
 
-    render() {
-        return (<div>
-            <h1>Congrats it's a FORM!!!!</h1><br/>
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Name:
-              <input type="text" value={this.state.value} onChange={this.handleChange} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
-        </div>
-        )
-    }
-}
+    const handleComponentChange = (e) => {
+        const updatedcomponents = [...componentState];
+        updatedcomponents[e.target.dataset.idx][e.target.className] = e.target.value;
+        setcomponentState(updatedcomponents);
+    };
+
+    return (
+        <form>
+            <label htmlFor="owner">Owner</label>
+            <input
+                type="text"
+                name="owner"
+                id="owner"
+                value={ownerState.owner}
+                onChange={handleOwnerChange}
+            />
+            <label htmlFor="description">Description</label>
+            <input
+                type="text"
+                name="description"
+                id="description"
+                value={ownerState.description}
+                onChange={handleOwnerChange}
+            />
+            <input
+                type="button"
+                value="Add New Component"
+                onClick={addcomponent}
+            />
+            {
+                componentState.map((val, idx) => (
+                    <Component
+                        key={`component-${idx}`}
+                        idx={idx}
+                        componentState={componentState}
+                        handleComponentChange={handleComponentChange}
+                    />
+                ))
+            }
+            <input type="submit" value="Submit" />
+        </form>
+    );
+};
+
+export default Form;
