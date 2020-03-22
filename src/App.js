@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import DesInt from './DesInt';
+import DesInt from './Designer/DesInt';
 import Login from './Login/Login';
 import {BrowserRouter as Router} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
