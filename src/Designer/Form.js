@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import Component from './Component';
 
 const Form = () => {
-    const [ownerState, setOwnerState] = useState({
-        owner: '',
+    const [cuurriculumState, setCuurriculumState] = useState({
+        cuurriculum: '',
         description: '',
     });
 
-    const handleOwnerChange = (e) => setOwnerState({
-        ...ownerState,
+    const handleCuurriculumChange = (e) => setCuurriculumState({
+        ...cuurriculumState,
         [e.target.name]: [e.target.value],
     });
 
-    const blankcomponent = { name: '', age: '' };
+    const blankcomponent = { name: '', type: '' };
     const [componentState, setcomponentState] = useState([
         { ...blankcomponent },
     ]);
@@ -28,40 +28,64 @@ const Form = () => {
     };
 
     return (
-        <form>
-            <label htmlFor="owner">Owner</label>
-            <input
-                type="text"
-                name="owner"
-                id="owner"
-                value={ownerState.owner}
-                onChange={handleOwnerChange}
-            />
-            <label htmlFor="description">Description</label>
-            <input
-                type="text"
-                name="description"
-                id="description"
-                value={ownerState.description}
-                onChange={handleOwnerChange}
-            />
-            <input
-                type="button"
-                value="Add New Component"
-                onClick={addcomponent}
-            />
-            {
-                componentState.map((val, idx) => (
-                    <Component
-                        key={`component-${idx}`}
-                        idx={idx}
-                        componentState={componentState}
-                        handleComponentChange={handleComponentChange}
-                    />
-                ))
-            }
-            <input type="submit" value="Submit" />
-        </form>
+        <div class="card card-primary">
+            <div class="card-header">Curriculum form</div>
+            <form>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label htmlFor="cuurriculum">Cuurriculum Name</label>
+                        <input
+                            type="text"
+                            name="cuurriculum"
+                            id="cuurriculum"
+                            value={cuurriculumState.cuurriculum}
+                            onChange={handleCuurriculumChange}
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label htmlFor="description">Description</label>
+                        <input
+                            type="text"
+                            name="description"
+                            id="description"
+                            value={cuurriculumState.description}
+                            onChange={handleCuurriculumChange}
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="card card-primary">
+                        <div class="card-header" style={{ backgroundColor: '#ff6200' }}>Component form</div>
+                        <div >
+                            {
+                                componentState.map((val, idx) => (
+                                    <Component
+                                        key={`component-${idx}`}
+                                        idx={idx}
+                                        componentState={componentState}
+                                        handleComponentChange={handleComponentChange}
+                                        class="form-control"
+                                    />
+                                ))
+                            }
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="button"
+                                value="Add New Component"
+                                onClick={addcomponent}
+                                class="btn btn-default float-center"
+                            />
+                        </div>
+                    </div>
+                    <br /><br />
+
+                    <div>
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
     );
 };
 
