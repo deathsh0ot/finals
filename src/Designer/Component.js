@@ -16,6 +16,7 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     className="name"
                     value={componentState[idx].name}
                     onChange={handleComponentChange}
+                    class="form-control"
                 />
             </div>
             <div >
@@ -28,6 +29,7 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     className="type"
                     value={componentState[idx].type}
                     onChange={handleComponentChange}
+                    class="form-control"
                 />
             </div>
         </div>

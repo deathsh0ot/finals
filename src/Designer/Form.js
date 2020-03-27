@@ -29,7 +29,7 @@ const Form = () => {
 
     return (
         <div class="card card-primary">
-            <div class="card-header">Curriculum form</div>
+            <div class="card-header">Curriculum Model form</div>
             <form>
                 <div class="card-body">
                     <div class="form-group">
@@ -56,7 +56,7 @@ const Form = () => {
                     </div>
                     <div class="card card-primary">
                         <div class="card-header" style={{ backgroundColor: '#ff6200' }}>Component form</div>
-                        <div >
+                        <div class="card-body">
                             {
                                 componentState.map((val, idx) => (
                                     <Component

@@ -49,7 +49,7 @@ export default class Menu extends Component {
                       <NavLink to="/" exact activeStyle={{ color: 'blue' }} className="nav-link">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                      <NavLink to="/Form" activeStyle={{ color: 'blue' }} className="nav-link">Curriculums</NavLink>
+                      <NavLink to="/Form" activeStyle={{ color: 'blue' }} className="nav-link">Curriculum Models</NavLink>
                     </li>
                     <li className="nav-item">
                       <NavLink to="/Users" exact activeStyle={{ color: 'blue' }} className="nav-link">Users</NavLink>
