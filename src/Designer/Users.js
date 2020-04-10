@@ -5,30 +5,30 @@ export default class Users extends Component {
         return (
             <div>
                 <h1>USERS WILL APPEAR Here!!!!</h1><br />
-                <div class="card card-danger">
-                    <div class="card-header">USER FORM</div>
-                    <div class="card-body">
-                        <div class="form-group">
+                <div className="card card-danger">
+                    <div className="card-header">USER FORM</div>
+                    <div className="card-body">
+                        <div className="form-group">
                             <label htmlFor="userName">User name</label>
                             <input
                                 type="text"
                                 name="userName"
                                 id="userName"
-                                class="form-control"
+                                className="form-control"
                             />
                         </div>
 
-                        <div class="form-group">
+                        <div className="form-group">
                             <label htmlFor="NIC">NIC</label>
                             <input
                                 type="text"
                                 name="NIC"
                                 id="NIC"
-                                class="form-control"
+                                className="form-control"
                             />
                         </div>
                         <div>
-                        <input type="submit" value="Submit" class="btn btn-danger" />
+                        <input type="submit" value="Submit" className="btn btn-danger" />
                     </div>
                     </div>
                 </div>

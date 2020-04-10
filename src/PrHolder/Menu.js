@@ -5,8 +5,8 @@ import {
   Route,
   NavLink
 } from "react-router-dom";
-import Form from './Form';
-import Users from './Users'
+import PForm from './PForm';
+
 
 export default class Menu extends Component {
   render() {
@@ -45,14 +45,12 @@ export default class Menu extends Component {
 
                   <ul className="nav nav-treeview">
                     <li className="nav-item">
-                      <NavLink to="/Designer" exact activeStyle={{ color: 'blue' }} className="nav-link">Home</NavLink>
+                      <NavLink to="/" exact activeStyle={{ color: 'blue' }} className="nav-link">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                      <NavLink to="/Designer/Form" activeStyle={{ color: 'blue' }} className="nav-link">Curriculum Models</NavLink>
+                      <NavLink to="/PForm" activeStyle={{ color: 'blue' }} className="nav-link">Curriculums</NavLink>
                     </li>
-                    <li className="nav-item">
-                      <NavLink to="/Designer/Users" exact activeStyle={{ color: 'blue' }} className="nav-link">Users</NavLink>
-                    </li>
+
                   </ul>
                 </li>
               </ul>
@@ -71,16 +69,13 @@ export default class Menu extends Component {
 
                   <Switch>
 
-                    <Route path="/Designer/Form">
-                      <Form />
+                    <Route path="/PForm">
+                      <PForm />
                     </Route>
-                    <Route path="/Designer/Users">
-                      <Users />
-                    </Route>
-                    <Route path="/Designer">
+                    <Route path="/">
                       <div>
-                      <h1>WELCOME DESIGNER</h1>
-                      <p>this app was made to ease and facilitate the making of curriculums and adapting them into establishments</p>
+                        <h1>WELCOME Project Holder</h1>
+                        <p>this app was made to ease and facilitate the making of curriculums and adapting them into establishments</p>
                       </div>
                     </Route>
                   </Switch>
@@ -89,7 +84,7 @@ export default class Menu extends Component {
                 </div>{/* /.col */}
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
-                    <li className="breadcrumb-item"><a href="/Designer">Home</a></li>
+                    <li className="breadcrumb-item"><a href="/">Home</a></li>
                     <li className="breadcrumb-item active">Dashboard</li>
                   </ol>
                 </div>{/* /.col */}

@@ -28,11 +28,11 @@ const Form = () => {
     };
 
     return (
-        <div class="card card-primary">
-            <div class="card-header">Curriculum Model form</div>
+        <div className="card card-primary">
+            <div className="card-header">Curriculum Model form</div>
             <form>
-                <div class="card-body">
-                    <div class="form-group">
+                <div className="card-body">
+                    <div className="form-group">
                         <label htmlFor="cuurriculum">Cuurriculum Name</label>
                         <input
                             type="text"
@@ -40,10 +40,10 @@ const Form = () => {
                             id="cuurriculum"
                             value={cuurriculumState.cuurriculum}
                             onChange={handleCuurriculumChange}
-                            class="form-control"
+                            className="form-control"
                         />
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label htmlFor="description">Description</label>
                         <input
                             type="text"
@@ -51,12 +51,12 @@ const Form = () => {
                             id="description"
                             value={cuurriculumState.description}
                             onChange={handleCuurriculumChange}
-                            class="form-control"
+                            className="form-control"
                         />
                     </div>
-                    <div class="card card-primary">
-                        <div class="card-header" style={{ backgroundColor: '#ff6200' }}>Component form</div>
-                        <div class="card-body">
+                    <div className="card card-primary">
+                        <div className="card-header" style={{ backgroundColor: '#ff6200' }}>Component form</div>
+                        <div className="card-body">
                             {
                                 componentState.map((val, idx) => (
                                     <Component
@@ -64,24 +64,24 @@ const Form = () => {
                                         idx={idx}
                                         componentState={componentState}
                                         handleComponentChange={handleComponentChange}
-                                        class="form-control"
+                                        className="form-control"
                                     />
                                 ))
                             }
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                             <input
                                 type="button"
                                 value="Add New Component"
                                 onClick={addcomponent}
-                                class="btn btn-default float-center"
+                                className="btn btn-default float-center"
                             />
                         </div>
                     </div>
                     <br /><br />
 
                     <div>
-                        <input type="submit" value="Submit" class="btn btn-primary" />
+                        <input type="submit" value="Submit" className="btn btn-primary" />
                     </div>
                 </div>
             </form>

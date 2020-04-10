@@ -1,79 +1,119 @@
-import React, { Component } from 'react'
+import React , { useState } from 'react';
+import store from 'store'
+import { Message } from 'semantic-ui-react';
+import { useHistory } from "react-router-dom";
+import isLoggedIn from '../helpers/isLoggedIn';
 
-export default class Login extends Component {
-    render() {
-        return (
-            <div>
-                <div>
-  <meta charSet="utf-8" />
-  <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-  <title>AdminLTE 3 | Log in</title>
-  {/* Tell the browser to be responsive to screen width */}
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {/* Font Awesome */}
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css" />
-  {/* Ionicons */}
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-  {/* icheck bootstrap */}
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
-  {/* Theme style */}
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css" />
-  {/* Google Font: Source Sans Pro */}
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
-  <div className="login-box">
-    <div className="login-logo">
-      <a href="../../index2.html"><b>Smart</b>Cursus</a>
-    </div>
-    {/* /.login-logo */}
-    <div className="card">
-      <div className="card-body login-card-body">
-        <p className="login-box-msg">Sign in to start your session</p>
-        <form action="../../index3.html" method="post">
-          <div className="input-group mb-3">
-            <input type="email" className="form-control" placeholder="Email" />
-            <div className="input-group-append">
-              <div className="input-group-text">
-                <span className="fas fa-envelope" />
-              </div>
-            </div>
-          </div>
-          <div className="input-group mb-3">
-            <input type="password" className="form-control" placeholder="Password" />
-            <div className="input-group-append">
-              <div className="input-group-text">
-                <span className="fas fa-lock" />
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-8">
-              <div className="icheck-primary">
-                <input type="checkbox" id="remember" />
-                <label htmlFor="remember">
-                  Remember Me
-                </label>
-              </div>
-            </div>
-            {/* /.col */}
-            <div className="col-4">
-              <button type="submit" className="btn btn-primary btn-block">Sign In</button>
-            </div>
-            {/* /.col */}
-          </div>
-        </form>
-      
-      
-      </div>
-      {/* /.login-card-body */}
-    </div>
-  </div>
-  {/* /.login-box */}
-  {/* jQuery */}
-  {/* Bootstrap 4 */}
-  {/* AdminLTE App */}
-</div>
 
-            </div>
-        )
+
+
+const Login = () => {
+  /*if(isLoggedIn()){
+    return <redirect to="/this will be a var"
+  }*/
+  const [iserror, setError] = useState(false);
+
+  let history = useHistory();
+  let username = '';
+  let password = '';
+  
+
+  let onSubmit = (e) => { 
+    setError("false");
+    e.preventDefault();
+    if (!((username === 'a' || username === 'b') && password === 'a')) {
+      setError("true");
+      return true ;
     }
-}
+
+    console.log("you're logged in. yay!");
+    store.set('loggedIn', true);
+
+    if (username === 'a') {
+      history.push("/Designer");
+    } else
+      history.push("/ProjectHolder");
+  }
+
+  let handleChangeUsername = (e) => {
+    const { name, value } = e.target;
+    username = value;
+  }
+  
+  let handleChangePassword = (e) => {
+    const { name, value } = e.target;
+    password = value;
+  }
+
+  return (
+    <div>
+      <div>
+        <div className="login-box">
+          <div className="login-logo">
+            <a href="/"> <b>Smart</b>Cursus</a>
+          </div>
+          {/* /.login-logo */}
+          <div className="card">
+            <div className="card-body login-card-body">
+              <p className="login-box-msg">Sign in to start your session</p>
+              {iserror && <Message
+                iserror={iserror}
+                content="That username/password is incorrect. Try again!"
+              />}
+              <form onSubmit={onSubmit} >
+                <div className="input-group mb-3">
+                  <input type="Text" className="form-control" placeholder="NIC"
+                    label="Username"
+                    name="username"
+                    onChange={handleChangeUsername} />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-envelope" />
+                    </div>
+                  </div>
+                </div>
+                <div className="input-group mb-3">
+                  <input type="password" className="form-control" placeholder="Password"
+                    label="Password"
+                    name="password"
+                    onChange={handleChangePassword} />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-lock" />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-8">
+                    <div className="icheck-primary">
+                      <input type="checkbox" id="remember" />
+                      <label htmlFor="remember">
+                        Remember Me
+                        </label>
+                    </div>
+                  </div>
+                  {/* /.col */}
+                  <div className="col-4">
+                    <button type="submit" className="btn btn-primary btn-block">Sign In</button>
+                  </div>
+                  {/* /.col */}
+                </div>
+              </form>
+
+
+            </div>
+            {/* /.login-card-body */}
+          </div>
+        </div>
+        {/* /.login-box */}
+        {/* jQuery */}
+        {/* Bootstrap 4 */}
+        {/* AdminLTE App */}
+      </div>
+    </div>
+  )
+};
+
+
+
+export default Login;

@@ -5,7 +5,7 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
     const ComponentId = `name-${idx}`;
     const typeId = `type-${idx}`;
     return (
-        <div class="card-body">
+        <div className="card-body">
             <div key={`component-${idx}`}>
                 <label htmlFor={ComponentId}>{`Component #${idx + 1}`}</label>
                 <input
@@ -16,7 +16,7 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     className="name"
                     value={componentState[idx].name}
                     onChange={handleComponentChange}
-                    class="form-control"
+                    className="form-control"
                 />
             </div>
             <div >
@@ -29,7 +29,7 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     className="type"
                     value={componentState[idx].type}
                     onChange={handleComponentChange}
-                    class="form-control"
+                    className="form-control"
                 />
             </div>
         </div>
