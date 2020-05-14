@@ -6,9 +6,9 @@ import {
 
 
 const Header = () => {
- let history = useHistory();
+  let history = useHistory();
 
-  function handleLogout () {
+  function handleLogout() {
     store.remove('loggedIn');
     history.push('/');
   };
@@ -39,15 +39,15 @@ const Header = () => {
           {/* Right navbar links */}
           <ul className="navbar-nav ml-auto">
             {/* Messages Dropdown Menu */}
-            
+
             {/* Notifications Dropdown Menu */}
-            
+
             <li className="nav-item">
               <div>
-                <input type="submit" 
-                className="btn btn-danger" 
-                value="LogOut" 
-                onClick={()=>handleLogout()} />
+                <input type="submit"
+                  className="btn btn-danger"
+                  value="LogOut"
+                  onClick={() => handleLogout()} />
               </div>
             </li>
           </ul>

@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import store from 'store'
 import { Message } from 'semantic-ui-react';
 import { useHistory } from "react-router-dom";
@@ -16,14 +16,14 @@ const Login = () => {
   let history = useHistory();
   let username = '';
   let password = '';
-  
 
-  let onSubmit = (e) => { 
+
+  let onSubmit = (e) => {
     setError("false");
     e.preventDefault();
     if (!((username === 'a' || username === 'b') && password === 'a')) {
       setError("true");
-      return true ;
+      return iserror;
     }
 
     console.log("you're logged in. yay!");
@@ -39,7 +39,7 @@ const Login = () => {
     const { name, value } = e.target;
     username = value;
   }
-  
+
   let handleChangePassword = (e) => {
     const { name, value } = e.target;
     password = value;
