@@ -8,20 +8,19 @@ import isLoggedIn from '../helpers/isLoggedIn';
 
 
 const Login = () => {
+  //this line of code will redirect the user back to the main menu he was on if Prholder then to sm/pr and vice versa
   /*if(isLoggedIn()){
     return <redirect to="/this will be a var"
   }*/
   const [iserror, setError] = useState(false);
 
   let history = useHistory();
-  let username = '';
-  let password = '';
 
 
   let onSubmit = (e) => {
     setError("false");
     e.preventDefault();
-    if (!((username === 'a' || username === 'b') && password === 'a')) {
+    if (!((loginState.username[0] === 'aaa' || loginState.username[0] === 'b') && loginState.password[0] === 'akk')) {
       setError("true");
       return iserror;
     }
@@ -29,25 +28,35 @@ const Login = () => {
     console.log("you're logged in. yay!");
     store.set('loggedIn', true);
 
-    if (username === 'a') {
+    if (loginState.username[0] === 'aaa') {
       history.push("/Designer");
     } else
       history.push("/ProjectHolder");
   }
-
-  let handleChangeUsername = (e) => {
-    const { name, value } = e.target;
+/*
+let handleChangeUsername = (e) => {
+    const { name,value } = e.target;
     username = value;
   }
 
   let handleChangePassword = (e) => {
-    const { name, value } = e.target;
+    const {name,value } = e.target;
     password = value;
-  }
+  }*/
+const [loginState, setLoginState] = useState({
+    username: '',
+    password: '',
+});
 
+const handleLoginChange = (e) => setLoginState({
+    ...loginState,
+    [e.target.name]: [e.target.value],
+});
+console.log(loginState.username);
+console.log(loginState.password);
   return (
     <div>
-      <div>
+      <div className="row justify-content-center">
         <div className="login-box">
           <div className="login-logo">
             <a href="/"> <b>Smart</b>Cursus</a>
@@ -63,9 +72,10 @@ const Login = () => {
               <form onSubmit={onSubmit} >
                 <div className="input-group mb-3">
                   <input type="Text" className="form-control" placeholder="NIC"
-                    label="Username"
                     name="username"
-                    onChange={handleChangeUsername} />
+                    id="username"
+                    value={loginState.username}
+                    onChange={handleLoginChange} />
                   <div className="input-group-append">
                     <div className="input-group-text">
                       <span className="fas fa-envelope" />
@@ -74,9 +84,10 @@ const Login = () => {
                 </div>
                 <div className="input-group mb-3">
                   <input type="password" className="form-control" placeholder="Password"
-                    label="Password"
                     name="password"
-                    onChange={handleChangePassword} />
+                    id="password"
+                    value={loginState.password}
+                    onChange={handleLoginChange} />
                   <div className="input-group-append">
                     <div className="input-group-text">
                       <span className="fas fa-lock" />
