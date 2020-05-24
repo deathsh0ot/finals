@@ -13,7 +13,6 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     name={ComponentId}
                     data-idx={idx}
                     id={ComponentId}
-                    className="name"
                     value={componentState[idx].name}
                     onChange={handleComponentChange}
                     className="form-control"
@@ -26,7 +25,6 @@ const Component = ({ idx, componentState, handleComponentChange }) => {
                     name={typeId}
                     data-idx={idx}
                     id={typeId}
-                    className="type"
                     value={componentState[idx].type}
                     onChange={handleComponentChange}
                     className="form-control"

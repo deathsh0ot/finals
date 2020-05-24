@@ -14,13 +14,13 @@ export default class App extends Component {
       <div>
         <Router>
           <Switch>
-            <Route path="/" exact Component={Login} >
-              <Login />
+            <Route exact path="/"  Component={Login}>
+            <Login/>
             </Route>
-            <Route path="/Designer" exact Component={DesInt} >
+            <Route exact path="/Designer"  Component={DesInt} >
               <DesInt />
             </Route>
-            <Route path="/ProjectHolder" exact Component={PrHInt} >
+            <Route exact path="/ProjectHolder"  Component={PrHInt} >
               <PrHInt />
             </Route>
           </Switch>

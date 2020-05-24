@@ -33,16 +33,6 @@ const Login = () => {
     } else
       history.push("/ProjectHolder");
   }
-/*
-let handleChangeUsername = (e) => {
-    const { name,value } = e.target;
-    username = value;
-  }
-
-  let handleChangePassword = (e) => {
-    const {name,value } = e.target;
-    password = value;
-  }*/
 const [loginState, setLoginState] = useState({
     username: '',
     password: '',
