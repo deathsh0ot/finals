@@ -5,7 +5,7 @@ import {
   Route,
   NavLink,
   useRouteMatch,
-  useParams
+  //useParams
 } from "react-router-dom";
 import Form from './Form';
 import Users from './Users'
@@ -71,7 +71,13 @@ const Menu = () => {
             <div className="content-header">
               <div className="container-fluid">
                 <div className="row mb-2">
-                  <div className="col-sm-6">
+                   <div className="col-sm-6">
+                    <ol className="breadcrumb float-sm-right">
+                      <li className="breadcrumb-item"><a href="/Designer">Home</a></li>
+                      <li className="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                  </div>
+                  <div className="container-fluid">
 
                     <Switch>
 
@@ -84,7 +90,7 @@ const Menu = () => {
                       <Route exact path="/Designer">
                         <div>
                           <h1>WELCOME DESIGNER</h1>
-                          <p>this app was made to ease and facilitate the making of curriculums and adapting them into establishments</p>
+                          <p>this app was made to ease and facilitate the making of curricula and adapting them into establishments</p>
                         </div>
                       </Route>
                     </Switch>
@@ -92,12 +98,7 @@ const Menu = () => {
 
                   </div>{/* /.col */}
 
-                  <div className="col-sm-6">
-                    <ol className="breadcrumb float-sm-right">
-                      <li className="breadcrumb-item"><a href="/Designer">Home</a></li>
-                      <li className="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                  </div>{/* /.col */}
+                 {/* /.col */}
                 </div>{/* /.row */}
               </div>{/* /.container-fluid */}
             </div>
