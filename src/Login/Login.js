@@ -3,6 +3,7 @@ import store from 'store'
 import { Message } from 'semantic-ui-react';
 import { useHistory } from "react-router-dom";
 import isLoggedIn from '../helpers/isLoggedIn';
+import axios from 'axios';
 
 
 
@@ -18,6 +19,19 @@ const Login = () => {
 
 
   let onSubmit = (e) => {
+    axios.get("http://smart.com/appusers",{
+     
+          headers:{ nic: loginState.username[0],
+            password:loginState.password[0]}
+          
+      
+    })
+    .then((response) => {
+      console.log("Login response",response.data);
+    })
+    .catch(error =>{
+      console.log(error.response)
+    });
     setError("false");
     e.preventDefault();
     if (!((loginState.username[0] === 'aaa' || loginState.username[0] === 'b') && loginState.password[0] === 'akk')) {
