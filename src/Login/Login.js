@@ -4,7 +4,7 @@ import { Message } from 'semantic-ui-react';
 import { useHistory } from "react-router-dom";
 import isLoggedIn from '../helpers/isLoggedIn';
 import axios from 'axios';
-
+import './Login.css';
 
 
 
@@ -19,47 +19,58 @@ const Login = () => {
 
 
   let onSubmit = (e) => {
-    axios.get("http://smart.com/appusers",{
-     
-          headers:{ nic: loginState.username[0],
-            password:loginState.password[0]}
-          
-      
-    })
-    .then((response) => {
-      console.log("Login response",response.data);
-    })
-    .catch(error =>{
-      console.log(error.response)
-    });
-    setError("false");
+    //setError("false");
     e.preventDefault();
-    if (!((loginState.username[0] === 'aaa' || loginState.username[0] === 'b') && loginState.password[0] === 'akk')) {
-      setError("true");
-      return iserror;
-    }
+    axios.get("http://smart.com/appusers/" + loginState.username[0])
+      .then((response) => {
+        //handle successful response/
+        setError("false");
+        if (loginState.password[0] === response.data.password) {
+          //handle successful login
+          store.set('loggedIn', true);
+          if (response.data.userType === 'Designer') {
+            history.push("/Designer");
+          } else
+            history.push("/ProjectHolder");
 
-    console.log("you're logged in. yay!");
-    store.set('loggedIn', true);
+        }
+        console.log("Login response", response.data);
+      })
+      .catch(error => {
+        console.log(error.response);
+        setError("true");
+        return iserror;
+      });
+    // setError("false");
+    // e.preventDefault();
+    // if (!((loginState.username[0] === 'aaa' || loginState.username[0] === 'b') && loginState.password[0] === 'akk')) {
+    //   setError("true");
+    //   return iserror;
+    // }
 
-    if (loginState.username[0] === 'aaa') {
-      history.push("/Designer");
-    } else
-      history.push("/ProjectHolder");
+    // console.log("you're logged in. yay!");
+    // store.set('loggedIn', true);
+
+    // if (loginState.username[0] === 'aaa') {
+    //   history.push("/Designer");
+    // } else
+    //   history.push("/ProjectHolder");
   }
-const [loginState, setLoginState] = useState({
+  const [loginState, setLoginState] = useState({
     username: '',
     password: '',
-});
+  });
 
-const handleLoginChange = (e) => setLoginState({
+  const handleLoginChange = (e) => setLoginState({
     ...loginState,
     [e.target.name]: [e.target.value],
-});
-console.log(loginState.username);
-console.log(loginState.password);
+  });
+  console.log(loginState.username);
+  console.log(loginState.password);
   return (
-    <div>
+    <div className="LoginContainer">
+      {/* for fun */}
+
       <div className="row justify-content-center">
         <div className="login-box">
           <div className="login-logo">

@@ -11,7 +11,6 @@ import PrHInt from './PrHolder/PrHInt'
 export default class App extends Component {
   render() {
     return (
-      <div>
         <Router>
           <Switch>
             <Route exact path="/"  Component={Login}>
@@ -25,7 +24,6 @@ export default class App extends Component {
             </Route>
           </Switch>
         </Router>
-      </div>
     )
   }
 }

@@ -71,16 +71,25 @@ export default class Users extends Component {
 
     //function that adds a new user into the base
     addUser() {
+        
         if (this.state.newUserData.username === "" || this.state.newUserData.password === "" || this.state.newUserData.userType === "" || this.state.newUserData.email === "" || this.state.newUserData.phoneNumber === "" || this.state.newUserData.nic === "") {
             this.setState({ empty_Error: true });
         }
         else {
+            let { username, password, userType, email, phoneNumber, nic } = this.state.newUserData;
             axios.post('http://smart.com/appusers', this.state.newUserData).then((response) => {
                 //updating the users object and closing the modal as well as resetting the newUserData object
                 let { users } = this.state;
-                //Object.values(users).push(response.data); Need to fix this bolth users and response.data are objects
                 //users=response.data; false doesn't work
                 this._refreshUsers(); //isn't efficient should look for a better method
+                //THIS IS WHERE THE NEW USER Is ADDED TO LOGIN TABLE
+                // axios.post('http://smart.com/login/',{nic,password,userType})
+                // .then((res) => {
+                //     console.log(res.data);
+                // })
+                // .catch(e =>{
+                //     console.log("login table: adding user error",e);
+                // });
                 this.setState({
                     users, newUserModal: false, newUserData: {
                         username: '',
@@ -104,10 +113,19 @@ export default class Users extends Component {
         if (this.state.editedUserData.username === "" || this.state.editedUserData.password === "" || this.state.editedUserData.userType === "" || this.state.editedUserData.email === "" || this.state.editedUserData.phoneNumber === "" || this.state.editedUserData.nic === "") {
             this.setState({ empty_Error: true });
         } else {
-            axios.put('http://smart.com/appusers/' + this.state.editedUserData.id, {
+            //id changed here
+            axios.put('http://smart.com/appusers/' + this.state.editedUserData.nic, {
                 username, password, userType, email, phoneNumber, nic
             }).then((response) => {
                 this._refreshUsers();
+                //THIS IS WHERE LOGIN TABLE IS UPDATED IF NEEEDEED
+                // axios.put('http://smart.com/login/'+this.state.editedUserData.nic,{nic,password,userType})
+                // .then((res) => {
+                //     console.log(res.data);
+                // })
+                // .catch(e =>{
+                //     console.log("login table: udpating user error",e);
+                // });
                 this.setState({
                     EditUserModal: false, editedUserData: {
                         id: '',
@@ -133,9 +151,18 @@ export default class Users extends Component {
             editedUserData: { id, username, password, userType, email, phoneNumber, nic }, EditUserModal: !this.state.EditUserModal
         });
     }
-    deleteUser(id) {
-        axios.delete('http://smart.com/appusers/' + id).then((response) => {
+    //id changed here as well
+    deleteUser(nic) {
+        axios.delete('http://smart.com/appusers/' + nic).then((response) => {
             this._refreshUsers();
+             //THIS IS WHERE THE USER IS DELETED FROM THE LOGIN TABLE
+                // axios.delete('http://smart.com/login/'+this.state.editedUserData.nic)
+                // .then((res) => {
+                //     console.log(res.data);
+                // })
+                // .catch(e =>{
+                //     console.log("login table: deleting user error",e);
+                // });
         });
     }
     _refreshUsers() {
@@ -170,7 +197,7 @@ export default class Users extends Component {
                     <td>{user.nic}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.id, user.username, user.password, user.userType, user.email, user.phoneNumber, user.nic)}>Edit</button>
-                        <button className="btn btn-danger" size="sm" onClick={this.deleteUser.bind(this, user.id)}>Delete</button>
+                        <button className="btn btn-danger" size="sm" onClick={this.deleteUser.bind(this, user.nic)}>Delete</button>
                     </td>
 
                 </tr>

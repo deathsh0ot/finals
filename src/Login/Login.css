@@ -1,0 +1,24 @@
+.LoginContainer{
+    background-image: url('/images/1.jpg'); 
+    height: 100%;
+    width:100%;
+    background-size: cover;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    overflow-x: hidden;
+}
+.login-card-body{
+    border-radius: 10px;
+}
+/* /images/background.png 'https://png.pngtree.com/thumb_back/fw800/background/20190820/pngtree-linear-learning-life-sticker-blackboard-background-image_303796.jpg'*/
+.justify-content-center {
+    -ms-flex-pack: center!important;
+    justify-content: center!important;
+    align-items: center;
+    padding-bottom: 200px;
+    height: 100%;
+}
