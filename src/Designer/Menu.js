@@ -8,8 +8,9 @@ import {
   HashRouter as Router
   //useParams
 } from "react-router-dom";
-import Form from './Form';
+import Models from './Models';
 import Users from './Users'
+
 
 const Menu = () => {
   //let match = useRouteMatch(); can use this for dynamic routes
@@ -32,7 +33,7 @@ const Menu = () => {
                 <img src="dist/img/blyat.jpg" className="img-circle elevation-2" alt="User" />
               </div>
               <div className="info">
-                <a href="fake_url" className="d-block">DeathShot</a>
+                <a href="fake_url" className="d-block">Ala Hamadi</a>
               </div>
             </div>
             {/* Sidebar Menu */}
@@ -54,7 +55,7 @@ const Menu = () => {
                       <NavLink to="/" exact activeStyle={{ color: 'blue' }} className="nav-link">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                      <NavLink to={"/Form"} activeStyle={{ color: 'blue' }} className="nav-link">Curriculum Models</NavLink>
+                      <NavLink to={"/Models"} activeStyle={{ color: 'blue' }} className="nav-link">Curriculum Models</NavLink>
                     </li>
                     <li className="nav-item">
                       <NavLink to={"/Users"} exact activeStyle={{ color: 'blue' }} className="nav-link">Users</NavLink>
@@ -83,7 +84,7 @@ const Menu = () => {
                 <div className="container-fluid">
 
                   <Switch>
-                    <Route path={"/Form"} exact component={Form}  />
+                    <Route path={"/Models"} exact component={Models}  />
                     <Route path={"/Users"} exact component={Users} />
                     <Route exact path="/">
                       <div>

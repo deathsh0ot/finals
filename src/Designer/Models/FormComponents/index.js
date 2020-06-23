@@ -1,0 +1,1 @@
+export {default as University } from './university/University';

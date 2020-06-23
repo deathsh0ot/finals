@@ -238,8 +238,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="Password"
                                                 type="password"
@@ -262,8 +261,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                       
                                             <AvField
                                                 label="User type"
                                                 type="select"
@@ -283,8 +281,7 @@ export default class Users extends Component {
                                                 <option >Designer</option>
                                                 <option>Project Holder</option>
                                             </AvField>
-                                        </div>
-                                        <div className="form-group">
+                                      
                                             <AvField
                                                 label="E-mail"
                                                 type="email"
@@ -301,8 +298,7 @@ export default class Users extends Component {
                                                 }
                                                 required
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="Phone number"
                                                 type="integer"
@@ -324,8 +320,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="NIC"
                                                 type="text"
@@ -397,8 +392,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="Password"
                                                 type="password"
@@ -420,8 +414,7 @@ export default class Users extends Component {
                                                     maxLength: { value: 25, errorMessage: 'The password must be between 8 and 25 characters' }
                                                 }}
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                       
                                             <AvField
                                                 label="User type"
                                                 type="select"
@@ -441,8 +434,7 @@ export default class Users extends Component {
                                                 <option>Designer</option>
                                                 <option>Project Holder</option>
                                             </AvField>
-                                        </div>
-                                        <div className="form-group">
+                                       
                                             <AvField
                                                 label="E-mail"
                                                 type="email"
@@ -459,8 +451,7 @@ export default class Users extends Component {
                                                 }
                                                 required
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="Phone number"
                                                 type="integer"
@@ -482,8 +473,7 @@ export default class Users extends Component {
                                                     maxLength: { value: 8 }
                                                 }}
                                             />
-                                        </div>
-                                        <div className="form-group">
+                                        
                                             <AvField
                                                 label="NIC"
                                                 type="text"

@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
-import AngryJoe from './FormComponents/AngryJoe';
+import AngryJoe from './AngryJoe';
+import * as Models from './FormComponents'
 export default class WorkModel extends Component {
     state={
-        selectedCardType:''
+        selectedModelType:'',
+       
     };
     render() {
         return (
@@ -13,7 +15,7 @@ export default class WorkModel extends Component {
                     {this.renderWorkModelSelector()}
 
                     {/* Dynamic component rendered here ! */}
-                    {this.renderSelectedCard(this.state.selectedCardType)}
+                    {this.renderSelectedModel(this.state.selectedModelType)}
                 </section>
             </Fragment>
         )
@@ -22,24 +24,24 @@ export default class WorkModel extends Component {
         return(
             <div className="form-group">
                 <AvField type="select"
-                 label="Select work model" 
+                 label="Select work model for :" 
                  name="select"
-                 onChange={(e) => this.setState({ selectedCardType: e.target.value })}
+                 onChange={(e) => this.setState({ selectedModelType: e.target.value })}
                  >
                     <option></option>
-                    <option>WorkModelA</option>
+                    <option>University</option>
                     <option>WorkModelB</option>
                 </AvField>
 
             </div>
         )
     }
-    renderSelectedCard(selectedCardType) {
-        if (!selectedCardType)
-          return <AngryJoe text="Pick a work model bruh!" />;
+    renderSelectedModel(selectedModelType) {
+        if (!selectedModelType)
+          return <AngryJoe text="Pick a work model!" />;
     
-        //const Card = Cards[selectedCardType];
+        const Model = Models[selectedModelType];
     
-       // return <Card />;
+       return <Model />;
       }
 }

@@ -1,16 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
-  NavLink
+  NavLink,
+  HashRouter as Router
 } from "react-router-dom";
 import PForm from './PForm';
 
 
-export default class Menu extends Component {
-  render() {
-    return (<Router>
+const Menu = () => {
+  //let match = useRouteMatch(); can use this for dynamic routes
+  return (
+
+    <Router>
+     
       <div>
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
@@ -26,7 +29,7 @@ export default class Menu extends Component {
                 <img src="dist/img/blyat.jpg" className="img-circle elevation-2" alt="User" />
               </div>
               <div className="info">
-                <a href="fake_url" className="d-block">DeathShot</a>
+                <a href="fake_url" className="d-block">Ala Hamadi</a>
               </div>
             </div>
             {/* Sidebar Menu */}
@@ -48,9 +51,8 @@ export default class Menu extends Component {
                       <NavLink to="/" exact activeStyle={{ color: 'blue' }} className="nav-link">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                      <NavLink to="/PForm" activeStyle={{ color: 'blue' }} className="nav-link">Curricula</NavLink>
+                      <NavLink to={"/PForm"} activeStyle={{ color: 'blue' }} className="nav-link">Degrees</NavLink>
                     </li>
-
                   </ul>
                 </li>
               </ul>
@@ -66,33 +68,34 @@ export default class Menu extends Component {
             <div className="container-fluid">
               <div className="row mb-2">
                 <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item"><a href="/ProjectHolder">Home</a></li>
+                    <li className="breadcrumb-item active">Dashboard</li>
+                  </ol>
+                </div>
+
+                <div className="container-fluid">
 
                   <Switch>
-
-                    <Route path="/PForm">
-                      <PForm />
-                    </Route>
-                    <Route path="/">
+                    <Route path={"/PForm"} exact component={PForm} />
+                    <Route exact path="/">
                       <div>
                         <h1>WELCOME Project Holder</h1>
-                        <p>this app was made to ease and facilitate the making of curriculums and adapting them into establishments</p>
+                        <p>this app was made to ease and facilitate the making of curricula and adapting them into establishments</p>
                       </div>
                     </Route>
                   </Switch>
 
 
                 </div>{/* /.col */}
-                <div className="col-sm-6">
-                  <ol className="breadcrumb float-sm-right">
-                    <li className="breadcrumb-item"><a href="/">Home</a></li>
-                    <li className="breadcrumb-item active">Dashboard</li>
-                  </ol>
-                </div>{/* /.col */}
+
+                {/* /.col */}
               </div>{/* /.row */}
             </div>{/* /.container-fluid */}
           </div>
           {/* /.content-header */}
           {/* Main content */}
+
 
         </div>
         {/* /.content-wrapper */}
@@ -102,6 +105,6 @@ export default class Menu extends Component {
         </aside>
       </div>
     </Router>
-    )
-  }
+  )
 }
+export default Menu;
