@@ -27,10 +27,14 @@ export default class Users extends Component {
         },
         nic_phError: false,
         empty_Error: false,
+        popoverOpen: false,
     }
     //Functionss!!
 
     //toggle functions
+    togglePopover() {
+        this.setState({ popoverOpen: !this.state.popoverOpen })
+    }
     toggleError() {
         this.setState({ nic_phError: !this.state.nic_phError });
     }
@@ -62,36 +66,25 @@ export default class Users extends Component {
         });
     }
     componentDidMount() {
-
-       
         this._refreshUsers();
-
-
     }
 
     //function that adds a new user into the base
     addUser() {
-        
+
         if (this.state.newUserData.username === "" || this.state.newUserData.password === "" || this.state.newUserData.userType === "" || this.state.newUserData.email === "" || this.state.newUserData.phoneNumber === "" || this.state.newUserData.nic === "") {
             this.setState({ empty_Error: true });
         }
         else {
-            let { username, password, userType, email, phoneNumber, nic } = this.state.newUserData;
             axios.post('http://smart.com/appusers', this.state.newUserData).then((response) => {
                 //updating the users object and closing the modal as well as resetting the newUserData object
                 let { users } = this.state;
-                //users=response.data; false doesn't work
-                this._refreshUsers(); //isn't efficient should look for a better method
-                //THIS IS WHERE THE NEW USER Is ADDED TO LOGIN TABLE
-                // axios.post('http://smart.com/login/',{nic,password,userType})
-                // .then((res) => {
-                //     console.log(res.data);
-                // })
-                // .catch(e =>{
-                //     console.log("login table: adding user error",e);
-                // });
+                console.log(response);
+                //users.push(response.data._embedded.appusers); //isn't efficient should look for a better method
+                this._refreshUsers();
                 this.setState({
-                    users, newUserModal: false, newUserData: {
+                    users, newUserModal: false,
+                    newUserData: {
                         username: '',
                         password: '',
                         userType: '',
@@ -100,34 +93,25 @@ export default class Users extends Component {
                         nic: '',
                     }
                 });
-            })
-                .catch(error => {
-                    this.setState({ nic_phError: true });
-                });
+            }).catch(error => {
+                console.log(error);
+                this.setState({ nic_phError: true });
+            });
         }
     }
 
     //function that updates the user
     updateUser() {
-        let { username, password, userType, email, phoneNumber, nic } = this.state.editedUserData;
         if (this.state.editedUserData.username === "" || this.state.editedUserData.password === "" || this.state.editedUserData.userType === "" || this.state.editedUserData.email === "" || this.state.editedUserData.phoneNumber === "" || this.state.editedUserData.nic === "") {
             this.setState({ empty_Error: true });
         } else {
             //id changed here
-            axios.put('http://smart.com/appusers/' + this.state.editedUserData.nic, {
-                username, password, userType, email, phoneNumber, nic
-            }).then((response) => {
+            axios.put('http://smart.com/appusers/' + this.state.editedUserData.nic, this.state.editedUserData)
+            .then((response) => {
                 this._refreshUsers();
-                //THIS IS WHERE LOGIN TABLE IS UPDATED IF NEEEDEED
-                // axios.put('http://smart.com/login/'+this.state.editedUserData.nic,{nic,password,userType})
-                // .then((res) => {
-                //     console.log(res.data);
-                // })
-                // .catch(e =>{
-                //     console.log("login table: udpating user error",e);
-                // });
                 this.setState({
-                    EditUserModal: false, editedUserData: {
+                    EditUserModal: false,
+                    editedUserData: {
                         id: '',
                         username: '',
                         password: '',
@@ -155,14 +139,6 @@ export default class Users extends Component {
     deleteUser(nic) {
         axios.delete('http://smart.com/appusers/' + nic).then((response) => {
             this._refreshUsers();
-             //THIS IS WHERE THE USER IS DELETED FROM THE LOGIN TABLE
-                // axios.delete('http://smart.com/login/'+this.state.editedUserData.nic)
-                // .then((res) => {
-                //     console.log(res.data);
-                // })
-                // .catch(e =>{
-                //     console.log("login table: deleting user error",e);
-                // });
         });
     }
     _refreshUsers() {
@@ -174,7 +150,6 @@ export default class Users extends Component {
             script.async = true;
             document.body.appendChild(script);
             //-------------/DATA-TABLE
-            console.log(response.data)
             this.setState({
                 users: response.data._embedded.appusers,
 
@@ -185,8 +160,7 @@ export default class Users extends Component {
     render() {
         //Object.values converts the users object variable into an array
         let users = Object.values(this.state.users).map((user, index) => {
-            console.log(Object.values(this.state.users));
-            index++;
+            index++
             return (
                 <tr key={user.id}>
                     <td>{index}</td>
@@ -197,9 +171,9 @@ export default class Users extends Component {
                     <td>{user.nic}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.id, user.username, user.password, user.userType, user.email, user.phoneNumber, user.nic)}>Edit</button>
-                        <button className="btn btn-danger" size="sm" onClick={this.deleteUser.bind(this, user.nic)}>Delete</button>
+                        <button className="btn btn-danger" size="sm" 
+                        onClick={() => { if (window.confirm('Are you sure you want to delete this user?')){let deleteUser = this.deleteUser.bind(this, user.nic); deleteUser(); }}}>Delete</button>
                     </td>
-
                 </tr>
             )
         });
@@ -238,7 +212,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        
+
                                             <AvField
                                                 label="Password"
                                                 type="password"
@@ -261,7 +235,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                       
+
                                             <AvField
                                                 label="User type"
                                                 type="select"
@@ -281,7 +255,7 @@ export default class Users extends Component {
                                                 <option >Designer</option>
                                                 <option>Project Holder</option>
                                             </AvField>
-                                      
+
                                             <AvField
                                                 label="E-mail"
                                                 type="email"
@@ -298,7 +272,7 @@ export default class Users extends Component {
                                                 }
                                                 required
                                             />
-                                        
+
                                             <AvField
                                                 label="Phone number"
                                                 type="integer"
@@ -320,7 +294,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        
+
                                             <AvField
                                                 label="NIC"
                                                 type="text"
@@ -392,7 +366,7 @@ export default class Users extends Component {
                                                 }}
 
                                             />
-                                        
+
                                             <AvField
                                                 label="Password"
                                                 type="password"
@@ -414,7 +388,7 @@ export default class Users extends Component {
                                                     maxLength: { value: 25, errorMessage: 'The password must be between 8 and 25 characters' }
                                                 }}
                                             />
-                                       
+
                                             <AvField
                                                 label="User type"
                                                 type="select"
@@ -434,7 +408,7 @@ export default class Users extends Component {
                                                 <option>Designer</option>
                                                 <option>Project Holder</option>
                                             </AvField>
-                                       
+
                                             <AvField
                                                 label="E-mail"
                                                 type="email"
@@ -451,7 +425,7 @@ export default class Users extends Component {
                                                 }
                                                 required
                                             />
-                                        
+
                                             <AvField
                                                 label="Phone number"
                                                 type="integer"
@@ -473,7 +447,7 @@ export default class Users extends Component {
                                                     maxLength: { value: 8 }
                                                 }}
                                             />
-                                        
+
                                             <AvField
                                                 label="NIC"
                                                 type="text"

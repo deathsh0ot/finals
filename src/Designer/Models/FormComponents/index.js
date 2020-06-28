@@ -1,1 +1,1 @@
-export {default as University } from './university/University';
+export {default as Higher_Education } from './higherEducation/HigherEducation';

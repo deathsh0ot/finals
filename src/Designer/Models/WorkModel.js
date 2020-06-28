@@ -29,7 +29,7 @@ export default class WorkModel extends Component {
                  onChange={(e) => this.setState({ selectedModelType: e.target.value })}
                  >
                     <option></option>
-                    <option>University</option>
+                    <option>Higher_Education</option>
                     <option>WorkModelB</option>
                 </AvField>
 

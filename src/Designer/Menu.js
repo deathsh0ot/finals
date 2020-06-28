@@ -9,7 +9,8 @@ import {
   //useParams
 } from "react-router-dom";
 import Models from './Models';
-import Users from './Users'
+import Users from './Users';
+import Higher_Education from './Models/FormComponents/higherEducation/HigherEducation';
 
 
 const Menu = () => {
@@ -86,6 +87,7 @@ const Menu = () => {
                   <Switch>
                     <Route path={"/Models"} exact component={Models}  />
                     <Route path={"/Users"} exact component={Users} />
+                    <Route path={"/Models/HigherEducation"} exact component={Higher_Education}/>
                     <Route exact path="/">
                       <div>
                         <h1>WELCOME DESIGNER</h1>
