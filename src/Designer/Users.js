@@ -32,9 +32,6 @@ export default class Users extends Component {
     //Functionss!!
 
     //toggle functions
-    togglePopover() {
-        this.setState({ popoverOpen: !this.state.popoverOpen })
-    }
     toggleError() {
         this.setState({ nic_phError: !this.state.nic_phError });
     }
@@ -94,7 +91,7 @@ export default class Users extends Component {
                     }
                 });
             }).catch(error => {
-                console.log(error);
+                console.log("this is the error:",error);
                 this.setState({ nic_phError: true });
             });
         }

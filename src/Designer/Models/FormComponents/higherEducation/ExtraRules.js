@@ -3,7 +3,7 @@ import AvField from "availity-reactstrap-validation/lib/AvField"
 const ExtrarulesInputs = (props) => {
   return (
     props.Rules.map((val, idx)=> {
-      let ExtraruleId = `Extrarule-${idx}`;
+      let ExtraruleId = `Rule-${idx}`;
       return (
         <div key={idx}>
           <AvField
@@ -12,8 +12,8 @@ const ExtrarulesInputs = (props) => {
             name={ExtraruleId}
             data-id={idx}
             id={ExtraruleId}
-            value={props.Rules[idx].name} 
-            className="ExtraRule"
+            value={props.Rules[idx].Rule} 
+            className="Rule"
           />
         </div>
       )

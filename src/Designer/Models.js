@@ -57,7 +57,8 @@ export default class Models extends Component {
     }
    
     deleteModel(id) {
-        axios.delete('http://pfe.tn/metacontext/' + id).then((response) => {
+        axios.delete('http://pfe.tn/elementmetaprocess/' + id).then((response) => {
+            console.log(response);
             this._refreshModels();
         });
     }
@@ -143,7 +144,7 @@ export default class Models extends Component {
                     <td>{model.Specialty}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editModel.bind(this,model)} >Edit</button>
-                        <button className="btn btn-danger" size="sm" >Delete</button>
+                        <button className="btn btn-danger" size="sm"  onClick={this.deleteModel.bind(this,model.id)}>Delete</button>
                     </td>
                 </tr>
             )
