@@ -11,13 +11,12 @@ export default class Users extends Component {
         newUserData: {
             username: '',
             password: '',
-            userType: '',
             email: '',
             phoneNumber: '',
+            userType: 'Designer',
             nic: '',
         },
         editedUserData: {
-            id: '',
             username: '',
             password: '',
             userType: '',
@@ -73,6 +72,7 @@ export default class Users extends Component {
             this.setState({ empty_Error: true });
         }
         else {
+            console.log(this.state.newUserData);
             axios.post('http://smart.com/appusers', this.state.newUserData).then((response) => {
                 //updating the users object and closing the modal as well as resetting the newUserData object
                 let { users } = this.state;
@@ -84,7 +84,7 @@ export default class Users extends Component {
                     newUserData: {
                         username: '',
                         password: '',
-                        userType: '',
+                        userType: 'Designer',
                         email: '',
                         phoneNumber: '',
                         nic: '',
@@ -93,6 +93,16 @@ export default class Users extends Component {
             }).catch(error => {
                 console.log("this is the error:",error);
                 this.setState({ nic_phError: true });
+                this._refreshUsers();
+                this.setState({newUserModal:false,
+                    newUserData: {
+                        username: '',
+                        password: '',
+                        userType: 'Designer',
+                        email: '',
+                        phoneNumber: '',
+                        nic: '',
+                    }})
             });
         }
     }
@@ -109,7 +119,6 @@ export default class Users extends Component {
                 this.setState({
                     EditUserModal: false,
                     editedUserData: {
-                        id: '',
                         username: '',
                         password: '',
                         userType: '',
@@ -127,9 +136,9 @@ export default class Users extends Component {
     //reloads the users List
 
     //function that edits the user
-    editUser(id, username, password, userType, email, phoneNumber, nic) {
+    editUser( username, password, userType, email, phoneNumber, nic) {
         this.setState({
-            editedUserData: { id, username, password, userType, email, phoneNumber, nic }, EditUserModal: !this.state.EditUserModal
+            editedUserData: { username, password, userType, email, phoneNumber, nic }, EditUserModal: !this.state.EditUserModal
         });
     }
     //id changed here as well
@@ -159,7 +168,7 @@ export default class Users extends Component {
         let users = Object.values(this.state.users).map((user, index) => {
             index++
             return (
-                <tr key={user.id}>
+                <tr key={user.nic}>
                     <td>{index}</td>
                     <td>{user.username}</td>
                     <td>{user.userType}</td>
@@ -167,7 +176,7 @@ export default class Users extends Component {
                     <td>{user.phoneNumber}</td>
                     <td>{user.nic}</td>
                     <td>
-                        <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.id, user.username, user.password, user.userType, user.email, user.phoneNumber, user.nic)}>Edit</button>
+                        <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.username, user.password, user.userType, user.email, user.phoneNumber, user.nic)}>Edit</button>
                         <button className="btn btn-danger" size="sm" 
                         onClick={() => { if (window.confirm('Are you sure you want to delete this user?')){let deleteUser = this.deleteUser.bind(this, user.nic); deleteUser(); }}}>Delete</button>
                     </td>

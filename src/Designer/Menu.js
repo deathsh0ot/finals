@@ -11,6 +11,7 @@ import {
 import Models from './Models';
 import Users from './Users';
 import Higher_Education from './Models/FormComponents/higherEducation/HigherEducation';
+import Home from './Home';
 
 
 const Menu = () => {
@@ -18,7 +19,7 @@ const Menu = () => {
   return (
 
     <Router>
-     
+
       <div>
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
@@ -85,13 +86,16 @@ const Menu = () => {
                 <div className="container-fluid">
 
                   <Switch>
-                    <Route path={"/Models"} exact component={Models}  />
+                    <Route path={"/Models"} exact component={Models} />
                     <Route path={"/Users"} exact component={Users} />
-                    <Route path={"/Models/HigherEducation"} exact component={Higher_Education}/>
+                    <Route path={"/Models/HigherEducation"} exact component={Higher_Education} />
                     <Route exact path="/">
                       <div>
                         <h1>WELCOME DESIGNER</h1>
                         <p>this app was made to ease and facilitate the making of curricula and adapting them into establishments</p>
+                        <div className="row justify-content-center">
+                          <Home/>
+                        </div>
                       </div>
                     </Route>
                   </Switch>

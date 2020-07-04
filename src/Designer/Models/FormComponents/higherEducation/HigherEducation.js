@@ -17,7 +17,7 @@ export default class HigherEducation extends Component {
             Mention: '',
             Specialty: '',
             Nb_years: '',
-            Calendar_sys: '',
+            Calendar_sys: 'Quarter',
             nb_units: '',
             credit: '',
         },
@@ -192,7 +192,7 @@ export default class HigherEducation extends Component {
                     Mention: '',
                     Specialty: '',
                     Nb_years: '',
-                    Calendar_sys: '',
+                    Calendar_sys: 'Quarter',
                     nb_units: '',
                     credit: '',
                 },
@@ -228,7 +228,7 @@ export default class HigherEducation extends Component {
             return (
                 <AvCheckbox key={TransModel.id}
                     name="Checkbox"
-                    label={TransModel.LabelMetaProcess +":"+TransModel.model_type+":"+TransModel.Field+":"+TransModel.Specialty}
+                    label={TransModel.LabelMetaProcess +" : "+TransModel.model_type+" : "+TransModel.Specialty}
                     value={TransModel.LabelMetaProcess}
                     onClick={e => this.checkvalue(e)}
                 />
@@ -238,7 +238,7 @@ export default class HigherEducation extends Component {
             return (
                 <div key={index}>
                     <h6>Transition from this model to {TransModelForm}</h6>
-                    <AvField name={TransModelForm} label="Score" />
+                    <AvField name={TransModelForm} label="Average Score" />
                     <AvField name="Credit" label="Credit" />
                     <div>
                         <form onChange={this.handleRulesChange.bind(this)}>

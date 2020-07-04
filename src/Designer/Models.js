@@ -237,10 +237,13 @@ export default class Models extends Component {
                                                 className="form-control"
                                                 value={this.state.EditedModelData.Field}
                                                 onChange={(e) => {
-                                                    let { EditedModelData } = this.state;
+                                                    let { EditedModelData,editedMetacontext } = this.state;
                                                     EditedModelData.Field = e.target.value;
-                                                    this.setState({ EditedModelData });
-                                                    this.state.NewContextData.labelMetaContext = e.target.value;
+                                                    editedMetacontext.labelMetaContext=e.target.value;
+                                                    this.setState({ 
+                                                        EditedModelData, 
+                                                        editedMetacontext
+                                                    });
                                                 }}
                                                 required
                                             />
