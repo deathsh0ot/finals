@@ -144,7 +144,7 @@ export default class Models extends Component {
                     <td>{model.Specialty}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editModel.bind(this,model)} >Edit</button>
-                        <button className="btn btn-danger" size="sm"  onClick={this.deleteModel.bind(this,model.id)}>Delete</button>
+                        <button className="btn btn-danger" size="sm"  onClick={() => { if (window.confirm('Are you sure you want to delete this model?')){let deleteModel = this.deleteModel.bind(this, model.id); deleteModel(); }}}>Delete</button>
                     </td>
                 </tr>
             )

@@ -34,27 +34,11 @@ const Login = () => {
             history.push("/ProjectHolder");
 
         }
-        console.log("Login response", response.data);
       })
       .catch(error => {
-        console.log(error.response);
         setError("true");
         return iserror;
       });
-    // setError("false");
-    // e.preventDefault();
-    // if (!((loginState.username[0] === 'aaa' || loginState.username[0] === 'b') && loginState.password[0] === 'akk')) {
-    //   setError("true");
-    //   return iserror;
-    // }
-
-    // console.log("you're logged in. yay!");
-    // store.set('loggedIn', true);
-
-    // if (loginState.username[0] === 'aaa') {
-    //   history.push("/Designer");
-    // } else
-    //   history.push("/ProjectHolder");
   }
   const [loginState, setLoginState] = useState({
     username: '',
@@ -65,24 +49,21 @@ const Login = () => {
     ...loginState,
     [e.target.name]: [e.target.value],
   });
-  console.log(loginState.username);
-  console.log(loginState.password);
   return (
     <div className="LoginContainer">
       {/* for fun */}
-
       <div className="row justify-content-center">
         <div className="login-box">
           <div className="login-logo">
-            <a href="/"> <b>Smart</b>Cursus</a>
+            <h1><a href="/"> <b>Smart</b>Cursus</a></h1>
           </div>
           {/* /.login-logo */}
-          <div className="card">
+          <div>
             <div className="card-body login-card-body">
               <p className="login-box-msg">Sign in to start your session</p>
               {iserror && <Message
                 iserror={iserror}
-                content="That username/password is incorrect. Try again!"
+                content="That NIC/password is incorrect. Try again!"
               />}
               <form onSubmit={onSubmit} >
                 <div className="input-group mb-3">
@@ -127,6 +108,11 @@ const Login = () => {
               </form>
 
 
+            </div>
+            <br /><br />
+            <div className="about ">
+              <h4>Welcome to Smart Cursus !</h4>
+              <p className="info">You can only access this website if you've already been added by a designer</p>
             </div>
             {/* /.login-card-body */}
           </div>

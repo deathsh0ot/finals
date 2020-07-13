@@ -1,24 +1,36 @@
-.LoginContainer{
-    background-image: url('/images/1.jpg'); 
-    height: 100%;
-    width:100%;
-    background-size: cover;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-    overflow-x: hidden;
+.LoginContainer {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  overflow-x: hidden;
+  background-image: url("https://i.pinimg.com/originals/6d/45/f3/6d45f38dad7c0a9345e83b7e1df3c803.jpg");
 }
-.login-card-body{
-    border-radius: 10px;
+.login-card-body {
+  border-radius: 15px;
+  box-shadow: 2px 2px 50px 2px;
 }
 /* /images/background.png 'https://png.pngtree.com/thumb_back/fw800/background/20190820/pngtree-linear-learning-life-sticker-blackboard-background-image_303796.jpg'*/
 .justify-content-center {
-    -ms-flex-pack: center!important;
-    justify-content: center!important;
-    align-items: center;
-    padding-bottom: 200px;
-    height: 100%;
+  -ms-flex-pack: center !important;
+  justify-content: center !important;
+  align-items: center;
+  padding: 0px 25%;
+  height: 100%;
+}
+.login-logo a {
+  color: aliceblue;
+}
+.about {
+  text-align: center;
+  color: aliceblue;
+}
+.info {
+  font-size: larger;
+  text-shadow: 10px 10px 80px black;
 }

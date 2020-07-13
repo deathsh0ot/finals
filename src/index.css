@@ -6,10 +6,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#root{
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.d-md-block{
+  padding-bottom: 50px !important;
+  color: black !important;
+  text-shadow  : 4px 0px 7px white !important; 
+}
+
+img {
+  opacity: 0.9;
 }
