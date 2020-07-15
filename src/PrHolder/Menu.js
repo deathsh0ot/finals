@@ -18,7 +18,7 @@ const Menu = () => {
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
           {/* Brand Logo */}
           <a href="index3.html" className="brand-link">
-            <img src="dist/img/logoSC.png" alt="Smart Cursus logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
+            <img src="dist/img/logoSC.png" alt="Smart Cursus logo" style={{ height:"50px", margin: "0px 10px" }} />
             <span className="brand-text font-weight-light">Smart Cursus</span>
           </a>
           {/* Sidebar */}
