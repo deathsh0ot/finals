@@ -7,15 +7,19 @@ import Subject from './Subject';
 export default class PForm extends Component {
     state = {
         addedDegree: false,
+        addedUnit: false,
         NewDegreeModal: false,
         EditDegreeModal: false,
+        degreeId: '',
+        unitId: '',
         EditDegree: {
             idDegree: '',
             degreeLabel: '',
         },
         SessionCounter: 1,
-        Units: {},
-        Subjects: {},
+        UnitCounter: 1,
+        editedUnits: {},
+        editedSubjects: {},
         Degrees: [],
         Models: [],
         ModelTypes: [],
@@ -41,9 +45,10 @@ export default class PForm extends Component {
             degreeLabel: '',
         },
         sessionNumber: 1,
+        currentSession: 0,
         Session: [],
-        Units: [{ idunit: '', unitLabel: '', unitcredit: '', unitcoeficient: '', unitNature: '', unitRegimen: '', Session_id: '' }],
-        Subjects: [{ idsubject: '', subjectLabel: '', subjectcredit: '', subjectcoeficient: '', subjectRegimen: '', unit_id: '' }],
+        Units: [{ unitLabel: '', unitcredit: '', unitcoeficient: '', unitNature: '', unitRegimen: '', Session_id: '' }],
+        Subjects: [{ subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: '' }],
     }
     SessionNumber() {
         if (this.state.ModelData.Calendar_sys === "Semester") {
@@ -96,51 +101,148 @@ export default class PForm extends Component {
     handleUnitsChange = (e) => {
         const { name, value } = e.target;
         let Units = [...this.state.Units]
-        Units[e.target.dataset.id].id = e.target.dataset.id;
         Units[e.target.dataset.id][name] = value;
         this.setState({ Units });
         console.log(Units);
     }
     addUnit = (e) => {
         this.setState((prevState) => ({
-            Units: [...prevState.Units, { idsubject: '', subjectLabel: '', subjectcredit: '', subjectcoeficient: '', subjectRegimen: '', unit_id: '' }],
+            Units: [...prevState.Units, { unitLabel: "", unitcredit: "", unitcoeficient: "", unitNature: "", unitRegimen: "", Session_id: "" }],
         }));
     }
+
     //adding subjects
     handleSubjectsChange = (e) => {
         const { name, value } = e.target;
         let Subjects = [...this.state.Subjects]
-        Subjects[e.target.dataset.id].id = e.target.dataset.id;
         Subjects[e.target.dataset.id][name] = value;
         this.setState({ Subjects });
         console.log(Subjects);
     }
     addsubject = (e) => {
         this.setState((prevState) => ({
-            Subjects: [...prevState.Subjects, { idunit: "", unitLabel: "", unitcredit: "", unitcoeficient: "", unitNature: "", unitRegimen: "", Session_id: "" }],
+            Subjects: [...prevState.Subjects, { subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: this.state.unitId }],
         }));
+        console.log("after being added ",this.state.Subjects)
     }
-    AddDegree() {
+    async addSessions() {
+        let i;
+        for (i = 1; i < this.state.sessionNumber + 1; i++) {
+            await axios.post('http://pfe.tn/session', {
+                SessionType: this.state.ModelData.Calendar_sys,
+                SessionNumber: i,
+                Degree_id: this.state.degreeId
+            }).then((response) => {
+                this.state.Session.push(response.data.idSession);
+                console.log(this.state.Session);
+            }).catch(error => {
+                console.log(error)
+            })
+
+        }
+    }
+    saveDegree() {
         let { Degree } = this.state;
         Degree.Model_id = this.state.ModelData.id;
         this.setState({ Degree });
         console.log(Degree);
         axios.post('http://pfe.tn/degree', this.state.Degree).then((response) => {
-            let { addedDegree } = this.state;
-            this.setState({ addedDegree: true });
-            console.log("this is it: ", response.data.idDegree);
+            console.log(response)
+            console.log(response.data.idDegree)
+            this.setState({
+                addedDegree: true,
+                degreeId: response.data.idDegree,
+            });
+            this.addSessions();
+
         });
-        // let i;
-        // for (i = 1; i < this.state.sessionNumber+1; i++) {
-        //     axios.post('http://pfe.tn/session',{
-        //         SessionType:this.state.ModelData.Calendar_sys,
-        //         SessionNumber:i,
-        //         Degree_id:this.state.Degree.id
-        //     }).then((response)=>{
-        //     
-        //})
-        //     
-        // }
+    }
+    addDegree(){
+        this._refreshDegrees();
+        this.togglenewDegreeModal();
+        this.setState({
+            formData: {
+                select1: '',
+                select2: '',
+                select3: '',
+                select4: '',
+                select5: '',
+            },
+            ModelData: {
+                id: '',
+                Nb_years: '',
+                Calendar_sys: '',
+                nb_units: '',
+                credit: '',
+            },
+            Degree: {
+                Model_id: '',
+                degreeLabel: '',
+            },
+        })
+    }
+    async SaveUnit() {
+        console.log(this.state.Session);
+        let { Units } = this.state;
+        Units[0].Session_id = this.state.Session[this.state.currentSession];
+        this.setState({ Units });
+        console.log("this is the unit ", Units[0]);
+        await axios.post('http://pfe.tn/unit', Units[0]).then((response) => {
+            console.log(response);
+            this.setState({ addedUnit: true });
+            this.setState({
+                unitId: response.data.idunit
+            })
+            console.log(this.state.unitId)
+        });
+    }
+     SaveSubjects() {
+        let i;
+        let { Subjects } = this.state;
+        Subjects[0].unit_id = this.state.unitId;
+        this.setState({ Subjects });
+        for (i = 0; i < this.state.Subjects.length; i++) {
+            console.log("inside loop: ",this.state.Subjects);
+            console.log("this it after adding unit id ", this.state.Subjects[i]);
+             axios.post('http://pfe.tn/subject', this.state.Subjects[i]).then((response) => {
+                console.log(response);
+            })
+        }
+    }
+    NextUnit() {
+        this.SaveSubjects();
+        if (parseInt(this.state.UnitCounter) < parseInt(this.state.ModelData.nb_units)) {
+            this.setState({
+                UnitCounter: this.state.UnitCounter + 1,
+                Units: [{ unitLabel: '', unitcredit: '', unitcoeficient: '', unitNature: '', unitRegimen: '', Session_id: '' }],
+                Subjects: [{ subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: '' }],
+                addedUnit: false,
+            });
+        }
+        else if (this.state.UnitCounter === parseInt(this.state.ModelData.nb_units)) {
+            alert('The maximum number of sessions set by the designer is' + this.state.ModelData.nb_units);
+        }
+        console.log(this.state.UnitCounter);
+        console.log(this.state.ModelData.nb_units);
+    }
+    NextSession() {
+        if (parseInt(this.state.SessionCounter) < parseInt(this.state.sessionNumber)) {
+            this.setState({
+                currentSession: this.state.currentSession + 1,
+                SessionCounter: this.state.SessionCounter + 1,
+                Units: [{ unitLabel: '', unitcredit: '', unitcoeficient: '', unitNature: '', unitRegimen: '', Session_id: '' }],
+                Subjects: [{ subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: '' }],
+                addedUnit: false,
+            });
+        }
+        else if (this.state.SessionCounter === this.state.sessionNumber) {
+            alert('The maximum number of sessions set by the designer is' + this.state.sessionNumber);
+        }
+    }
+    DeleteDegree(degreeId) {
+        axios.delete('http://pfe.tn/degree/' + degreeId).then((response) => {
+            this._refreshDegrees();
+        });
     }
     _refreshDegrees() {
 
@@ -153,10 +255,29 @@ export default class PForm extends Component {
             //-------------/DATA-TABLE
             this.setState({
                 Degrees: response.data._embedded.degree,
-
             })
 
         });
+    }
+    Cancel() {
+        this.DeleteDegree(this.state.degreeId);
+        this.togglenewDegreeModal();
+        this.setState({
+            formData: {
+                select1: '',
+                select2: '',
+                select3: '',
+                select4: '',
+                select5: '',
+            },
+            ModelData: {
+                id: '',
+                Nb_years: '',
+                Calendar_sys: '',
+                nb_units: '',
+                credit: '',
+            },
+        })
     }
     render() {
         let { Units } = this.state;
@@ -198,7 +319,7 @@ export default class PForm extends Component {
                     <td>{Degree.Specialty}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editDegree.bind(this, Degree)}>Edit</button>
-                        <button className="btn btn-danger" size="sm" onClick={() => { if (window.confirm('Are you sure you want to delete this degree?')) { } }} >Delete</button>
+                        <button className="btn btn-danger" size="sm" onClick={() => { if (window.confirm('Are you sure you want to delete this degree?')) {let DeleteDegree=this.DeleteDegree.bind(this,Degree.idDegree); DeleteDegree(); } }} >Delete</button>
                     </td>
                 </tr>
             )
@@ -358,7 +479,7 @@ export default class PForm extends Component {
                                             />
                                         )}
                                         {this.state.Degree.degreeLabel !== '' && (
-                                            <Button onClick={this.AddDegree.bind(this)}>save degree and continue</Button>
+                                            <Button onClick={this.saveDegree.bind(this)}>save degree and continue</Button>
                                         )}
                                         {this.state.addedDegree && (
                                             <div>
@@ -369,17 +490,21 @@ export default class PForm extends Component {
                                                         <AvForm>
                                                             <div>
                                                                 <form onChange={this.handleUnitsChange.bind(this)}>
-                                                                    <Unit Units={Units} />
-                                                                    <form onChange={this.handleSubjectsChange.bind(this)}>
-                                                                        <Subject Subjects={Subjects} />
-                                                                        <Button onClick={this.addsubject.bind(this)}>Add subject</Button>
-                                                                    </form>
-                                                                    <br />
-                                                                    <Button onClick={this.addUnit.bind(this)}>Add unit</Button>
+                                                                    <div className="card card-secondary">
+                                                                        <div className="card-header">{"Unit number :" + this.state.UnitCounter}</div>
+                                                                        <Unit Units={Units} /><br />
+                                                                        <Button onClick={this.SaveUnit.bind(this)}>Save unit and add subjects</Button><br />
+                                                                    </div>
                                                                 </form>
+                                                                {this.state.addedUnit && (<form onChange={this.handleSubjectsChange.bind(this)}>
+                                                                    <Subject Subjects={Subjects} />
+                                                                    <Button onClick={this.addsubject.bind(this)}>Add subject</Button><br />
+
+                                                                    <Button onClick={this.NextUnit.bind(this)}>Save subjects and add unit</Button>
+                                                                </form>)}
                                                             </div>
                                                             <br />
-                                                            <Button>{"Next " + this.state.ModelData.Calendar_sys}</Button>
+                                                            <Button onClick={this.NextSession.bind(this)}>{"Next " + this.state.ModelData.Calendar_sys}</Button><br />
                                                         </AvForm>
                                                     </div>
                                                 </div>
@@ -392,8 +517,8 @@ export default class PForm extends Component {
 
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" >Add Degree</Button>{' '}
-                            <Button color="secondary" onClick={this.togglenewDegreeModal.bind(this)}>Cancel</Button>
+                            <Button color="primary" onClick={this.addDegree.bind(this)}>Add Degree</Button>{' '}
+                            <Button color="secondary" onClick={this.Cancel.bind(this)}>Cancel</Button>
                         </ModalFooter>
                     </Modal>
 
@@ -460,10 +585,10 @@ export default class PForm extends Component {
                                             <tfoot>
                                                 <tr>
                                                     <td>#</td>
-                                                    <th>Degree name</th>
-                                                    <th>Degree Field</th>
-                                                    <th>Degree Mention</th>
-                                                    <th>Degree Specialty</th>
+                                                    <td>Degree name</td>
+                                                    <td>Degree Field</td>
+                                                    <td>Degree Mention</td>
+                                                    <td>Degree Specialty</td>
                                                     <td>Action</td>
                                                 </tr>
                                             </tfoot>

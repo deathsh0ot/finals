@@ -44,10 +44,10 @@ const subjectInputs = (props) => {
                 label="subject regimen"
                 placeholder="enter subject regimen"
                 type="text"
-                name="unitRegimen"
+                name="subjectRegimen"
                 data-id={idx}
                 id={subjectId}
-                value={props.Subjects[idx].unitRegimen}
+                value={props.Subjects[idx].subjectRegimen}
                 className="subject"
               />
               {/* <AvField
