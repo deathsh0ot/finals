@@ -7,35 +7,43 @@ import axios from 'axios';
 import './Login.css';
 
 
-
 const Login = () => {
   //this line of code will redirect the user back to the main menu he was on if Prholder then to sm/pr and vice versa
   /*if(isLoggedIn()){
     return <redirect to="/this will be a var"
   }*/
   const [iserror, setError] = useState(false);
-
   let history = useHistory();
-
-
   let onSubmit = (e) => {
     //setError("false");
     e.preventDefault();
-    axios.get("http://smart.com/appusers/" + loginState.username[0])
-      .then((response) => {
-        //handle successful response/
-        setError("false");
-        if (loginState.password[0] === response.data.password) {
-          //handle successful login
-          store.set('loggedIn', true);
-          if (response.data.userType === 'Designer') {
-            history.push("/Designer");
-          } else
-            history.push("/ProjectHolder");
+//loginState.username
+let raw = JSON.stringify({"grant_type":"password","username":String(loginState.username),"password":String(loginState.password)});
 
-        }
+const headers={
+  'Authorization': 'Basic dGVzdGNsaWVudDp0ZXN0', 
+  'Content-Type': 'application/json'
+}
+
+    axios.post("http://pfe.tn/oauth",raw,{headers:headers}
+      
+    )
+      .then((response) => {
+        console.log(response);
+        axios.get("http://pfe.tn/user-type/"+loginState.username).then((response)=>{
+          //handle successful login
+          setError("false");
+          store.set('loggedIn', true);
+          if(response.data[0].userType ==='Designer'){
+            history.push("/Designer");
+          }
+          else
+               history.push("/ProjectHolder");
+          console.log(response)
+        })
       })
       .catch(error => {
+        console.log(error)
         setError("true");
         return iserror;
       });

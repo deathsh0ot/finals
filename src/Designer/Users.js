@@ -14,7 +14,7 @@ export default class Users extends Component {
             email: '',
             phoneNumber: '',
             userType: 'Designer',
-            nic: '',
+            username: '',
         },
         editedUserData: {
             username: '',
@@ -22,7 +22,7 @@ export default class Users extends Component {
             userType: '',
             email: '',
             phoneNumber: '',
-            nic: '',
+            username: '',
         },
         nic_phError: false,
         empty_Error: false,
@@ -68,12 +68,12 @@ export default class Users extends Component {
     //function that adds a new user into the base
     addUser() {
 
-        if (this.state.newUserData.username === "" || this.state.newUserData.password === "" || this.state.newUserData.userType === "" || this.state.newUserData.email === "" || this.state.newUserData.phoneNumber === "" || this.state.newUserData.nic === "") {
+        if (this.state.newUserData.username === "" || this.state.newUserData.password === "" || this.state.newUserData.userType === "" || this.state.newUserData.email === "" || this.state.newUserData.phoneNumber === "" || this.state.newUserData.username === "") {
             this.setState({ empty_Error: true });
         }
         else {
             console.log(this.state.newUserData);
-            axios.post('http://smart.com/appusers', this.state.newUserData).then((response) => {
+            axios.post('http://pfe.tn/user', this.state.newUserData).then((response) => {
                 //updating the users object and closing the modal as well as resetting the newUserData object
                 let { users } = this.state;
                 console.log(response);
@@ -87,7 +87,7 @@ export default class Users extends Component {
                         userType: 'Designer',
                         email: '',
                         phoneNumber: '',
-                        nic: '',
+                        username: '',
                     }
                 });
             }).catch(error => {
@@ -101,7 +101,7 @@ export default class Users extends Component {
                         userType: 'Designer',
                         email: '',
                         phoneNumber: '',
-                        nic: '',
+                        username: '',
                     }})
             });
         }
@@ -109,22 +109,22 @@ export default class Users extends Component {
 
     //function that updates the user
     updateUser() {
-        if (this.state.editedUserData.username === "" || this.state.editedUserData.password === "" || this.state.editedUserData.userType === "" || this.state.editedUserData.email === "" || this.state.editedUserData.phoneNumber === "" || this.state.editedUserData.nic === "") {
+        if (this.state.editedUserData.username === "" || this.state.editedUserData.password === "" || this.state.editedUserData.userType === "" || this.state.editedUserData.email === "" || this.state.editedUserData.phoneNumber === "" || this.state.editedUserData.username === "") {
             this.setState({ empty_Error: true });
         } else {
             //id changed here
-            axios.put('http://smart.com/appusers/' + this.state.editedUserData.nic, this.state.editedUserData)
+            axios.put('http://pfe.tn/user/' + this.state.editedUserData.username, this.state.editedUserData)
             .then((response) => {
                 this._refreshUsers();
                 this.setState({
                     EditUserModal: false,
                     editedUserData: {
-                        username: '',
+                        name: '',
                         password: '',
                         userType: '',
                         email: '',
                         phoneNumber: '',
-                        nic: '',
+                        username: '',
                     }
                 });
                 console.log(response.data);
@@ -136,20 +136,20 @@ export default class Users extends Component {
     //reloads the users List
 
     //function that edits the user
-    editUser( username, password, userType, email, phoneNumber, nic) {
+    editUser( name, password, userType, email, phoneNumber, username) {
         this.setState({
-            editedUserData: { username, password, userType, email, phoneNumber, nic }, EditUserModal: !this.state.EditUserModal
+            editedUserData: { name, password, userType, email, phoneNumber, username }, EditUserModal: !this.state.EditUserModal
         });
     }
     //id changed here as well
-    deleteUser(nic) {
-        axios.delete('http://smart.com/appusers/' + nic).then((response) => {
+    deleteUser(username) {
+        axios.delete('http://pfe.tn/user/' + username).then((response) => {
             this._refreshUsers();
         });
     }
     _refreshUsers() {
 
-        axios.get('http://smart.com/appusers').then((response) => {
+        axios.get('http://pfe.tn/user').then((response) => {
             //this needs to be fixed (DATA-TABLE)
             const script = document.createElement("script");
             script.src = `dist/js/content.js`;
@@ -157,7 +157,7 @@ export default class Users extends Component {
             document.body.appendChild(script);
             //-------------/DATA-TABLE
             this.setState({
-                users: response.data._embedded.appusers,
+                users: response.data._embedded.user,
 
             })
 
@@ -168,17 +168,17 @@ export default class Users extends Component {
         let users = Object.values(this.state.users).map((user, index) => {
             index++
             return (
-                <tr key={user.nic}>
+                <tr key={user.username}>
                     <td>{index}</td>
-                    <td>{user.username}</td>
+                    <td>{user.name}</td>
                     <td>{user.userType}</td>
                     <td>{user.email}</td>
                     <td>{user.phoneNumber}</td>
-                    <td>{user.nic}</td>
+                    <td>{user.username}</td>
                     <td>
-                        <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.username, user.password, user.userType, user.email, user.phoneNumber, user.nic)}>Edit</button>
+                        <button className="btn btn-success mr-2" size="sm" onClick={this.editUser.bind(this, user.name, user.password, user.userType, user.email, user.phoneNumber, user.username)}>Edit</button>
                         <button className="btn btn-danger" size="sm" 
-                        onClick={() => { if (window.confirm('Are you sure you want to delete this user?')){let deleteUser = this.deleteUser.bind(this, user.nic); deleteUser(); }}}>Delete</button>
+                        onClick={() => { if (window.confirm('Are you sure you want to delete this user?')){let deleteUser = this.deleteUser.bind(this, user.username); deleteUser(); }}}>Delete</button>
                     </td>
                 </tr>
             )
@@ -202,10 +202,10 @@ export default class Users extends Component {
                                                 name="username"
                                                 id="username"
                                                 className="form-control"
-                                                value={this.state.newUserData.username}
+                                                value={this.state.newUserData.name}
                                                 onChange={(e) => {
                                                     let { newUserData } = this.state;
-                                                    newUserData.username = e.target.value;
+                                                    newUserData.name = e.target.value;
                                                     this.setState({ newUserData });
                                                 }
 
@@ -307,10 +307,10 @@ export default class Users extends Component {
                                                 name="nic"
                                                 id="nic"
                                                 className="form-control"
-                                                value={this.state.newUserData.nic}
+                                                value={this.state.newUserData.username}
                                                 onChange={(e) => {
                                                     let { newUserData } = this.state;
-                                                    newUserData.nic = e.target.value;
+                                                    newUserData.username = e.target.value;
                                                     this.setState({ newUserData });
                                                 }
 
@@ -356,10 +356,10 @@ export default class Users extends Component {
                                                 name="username"
                                                 id="username"
                                                 className="form-control"
-                                                value={this.state.editedUserData.username}
+                                                value={this.state.editedUserData.name}
                                                 onChange={(e) => {
                                                     let { editedUserData } = this.state;
-                                                    editedUserData.username = e.target.value;
+                                                    editedUserData.name = e.target.value;
                                                     this.setState({ editedUserData });
                                                 }
 
@@ -460,10 +460,10 @@ export default class Users extends Component {
                                                 name="nic"
                                                 id="nic"
                                                 className="form-control"
-                                                value={this.state.editedUserData.nic}
+                                                value={this.state.editedUserData.username}
                                                 onChange={(e) => {
                                                     let { editedUserData } = this.state;
-                                                    editedUserData.nic = e.target.value;
+                                                    editedUserData.username = e.target.value;
                                                     this.setState({ editedUserData });
                                                 }
 

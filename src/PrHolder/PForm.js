@@ -28,17 +28,30 @@ export default class PForm extends Component {
             Calendar_sys: '',
             nb_units: '',
             credit: '',
-            session: [ ],
+            session: [],
             Unit: [],
-            subject: [ ]
+            subject: []
         },
         SessionCounter: 1,
         UnitCounter: 1,
-        editedUnits: {},
-        editedSubjects: {},
-        editSelects:{
-            select1:'',
-            select2:''
+        editedUnits: {
+            idunit: '',
+            unitLabel: '',
+            unitcredit: '',
+            unitcoeficient: '',
+            unitNature: '',
+            unitRegimen: '',
+        },
+        editedSubjects: {
+            idsubject: '',
+            subjectlabel: '',
+            subjectCoefficient: '',
+            subjectcredit: '',
+            subjectRegimen: '',
+        },
+        editSelects: {
+            select1: '',
+            select2: ''
         },
         Degrees: [],
         Models: [],
@@ -160,7 +173,7 @@ export default class PForm extends Component {
         this.setState((prevState) => ({
             Subjects: [...prevState.Subjects, { subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: this.state.unitId }],
         }));
-        console.log("after being added ",this.state.Subjects)
+        console.log("after being added ", this.state.Subjects)
     }
     async addSessions() {
         let i;
@@ -194,7 +207,7 @@ export default class PForm extends Component {
 
         });
     }
-    addDegree(){
+    addDegree() {
         this._refreshDegrees();
         this.togglenewDegreeModal();
         this.setState({
@@ -235,15 +248,15 @@ export default class PForm extends Component {
         });
     }
     //Saves subjects
-     SaveSubjects() {
+    SaveSubjects() {
         let i;
         let { Subjects } = this.state;
         Subjects[0].unit_id = this.state.unitId;
         this.setState({ Subjects });
         for (i = 0; i < this.state.Subjects.length; i++) {
-            console.log("inside loop: ",this.state.Subjects);
+            console.log("inside loop: ", this.state.Subjects);
             console.log("this it after adding unit id ", this.state.Subjects[i]);
-             axios.post('http://pfe.tn/subject', this.state.Subjects[i]).then((response) => {
+            axios.post('http://pfe.tn/subject', this.state.Subjects[i]).then((response) => {
                 console.log(response);
             })
         }
@@ -265,7 +278,7 @@ export default class PForm extends Component {
         console.log(this.state.UnitCounter);
         console.log(this.state.ModelData.nb_units);
     }
-//Moves into the next session if it's still under the limit
+    //Moves into the next session if it's still under the limit
     NextSession() {
         if (parseInt(this.state.SessionCounter) < parseInt(this.state.sessionNumber)) {
             this.setState({
@@ -323,6 +336,60 @@ export default class PForm extends Component {
             },
         })
     }
+    //updates Degree
+   async Update(){
+        await axios.put('http://pfe.tn/degree/'+this.state.EditDegree.idDegree,{
+            degreeLabel:this.state.EditDegree.degreeLabel
+        }).then((response)=>{
+            console.log(response);
+        })
+        await axios.put('http://pfe.tn/unit/'+ this.state.editedUnits.idunit, this.state.editedUnits).then((response)=>{
+            console.log(response);
+        }
+        )
+        await axios.put('http://pfe.tn/subject/'+this.state.editedSubjects.idsubject, this.state.editedSubjects).then((response)=>{
+            console.log(response);
+            this._refreshDegrees();
+            this.toggleeditDegreeModal();
+            this.setState({
+                editedSubjects: {
+                    EditDegree: {
+                        idDegree: '',
+                        Model_id: '',
+                        degreeLabel: '',
+                        MetaModelsWorker_id: '',
+                        MetaContext_id: '',
+                        LabelMetaProcess: '',
+                        DescMetaProcess: '',
+                        model_type: '',
+                        Field: '',
+                        Mention: '',
+                        Specialty: '',
+                        Nb_years: '',
+                        Calendar_sys: '',
+                        nb_units: '',
+                        credit: '',
+                        session: [],
+                        Unit: [],
+                        subject: []
+                    },
+                    editedUnits: {
+                        idunit: '',
+                        unitLabel: '',
+                        unitcredit: '',
+                        unitcoeficient: '',
+                        unitNature: '',
+                        unitRegimen: '',
+                    },
+                    idsubject: '',
+                    subjectlabel: '',
+                    subjectCoefficient: '',
+                    subjectcredit: '',
+                    subjectRegimen: '',
+                },
+            })
+        })
+    }
     render() {
         let { Units } = this.state;
         let { Subjects } = this.state;
@@ -363,62 +430,162 @@ export default class PForm extends Component {
                     <td>{Degree.Specialty}</td>
                     <td>
                         <button className="btn btn-success mr-2" size="sm" onClick={this.editDegree.bind(this, Degree)}>Edit</button>
-                        <button className="btn btn-danger" size="sm" onClick={() => { if (window.confirm('Are you sure you want to delete this degree?')) {let DeleteDegree=this.DeleteDegree.bind(this,Degree.idDegree); DeleteDegree(); } }} >Delete</button>
+                        <button className="btn btn-danger" size="sm" onClick={() => { if (window.confirm('Are you sure you want to delete this degree?')) { let DeleteDegree = this.DeleteDegree.bind(this, Degree.idDegree); DeleteDegree(); } }} >Delete</button>
                     </td>
                 </tr>
             )
         });
-        let Sessions=Object.values(this.state.EditDegree.session).map((Session) =>{
-            return(
-            <option key={Session.idSession} Value={Session.idSession} id={Session.SessionNumber}>{Session.SessionNumber}</option>
+        let Sessions = Object.values(this.state.EditDegree.session).map((Session) => {
+            return (
+                <option key={Session.Session_id} value={Session.Session_id} label={Session.SessionNumber} />
             )
         })
-        let Unitz = Object.values(this.state.EditDegree.Unit).map((Unit)=>{
-            if(Unit.session_id === this.state.editSelects.select1){
-                return(
-                <option key={Unit.idunit}>{Unit.unitLabel}</option>
+        let Unitz = Object.values(this.state.EditDegree.Unit).map((Unit, idx) => {
+            if (Unit.session_id === this.state.editSelects.select1) {
+                return (
+                    <option key={Unit.idunit} value={Unit.idunit} label={Unit.unitLabel} />
+
                 )
             }
         })
-        let Subjectz = Object.values(this.state.EditDegree.subject).map((Subjecz,idx)=>{
-            return(<div className="card card-primary">
-            <div className="card-header">{"subject number :" + (idx + 1)}</div>
-            <div className="card-body">
-              <AvField
-                label="subject label"
-                type="text"
-                name="subjectlabel"
-                data-id={idx}
-                value={Subjecz.subjectlabel}
-                className="subject"
-              />
-              <AvField
-                label="subject credit"
-                type="text"
-                name="subjectcredit"
-                data-id={idx}
-                value={Subjecz.subjectcredit}
-                className="subject"
-              />
-              <AvField
-                label="subject coefficient"
-                type="text"
-                name="subjectCoefficient"
-                data-id={idx}
-                value={Subjecz.subjectCoefficient}
-                className="subject"
-              />
-              <AvField
-                label="subject regimen"
-                type="text"
-                name="subjectRegimen"
-                data-id={idx}
-                value={Subjecz.subjectRegimen}
-                className="subject"
-              />
-              </div>
-              </div>
-            )
+        let dispunits = Object.values(this.state.EditDegree.Unit).map((dispUnit, idx) => {
+            if (dispUnit.idunit === this.state.editSelects.select2) {
+                this.state.editedUnits.idunit = dispUnit.idunit;
+                return (
+                    <div className="card-body">
+                        <AvField
+                            label="Unit label"
+                            type="text"
+                            name="unitLabel"
+                            data-id={idx}
+                            value={dispUnit.unitLabel}
+                            className="unit"
+                            onChange={(e) => {
+                                this.state.editedUnits.unitLabel = e.target.value;
+                            }
+
+                            }
+                        />
+                        <AvField
+                            label="Unit credit"
+                            type="text"
+                            name="unitcredit"
+                            data-id={idx}
+                            value={dispUnit.unitcredit}
+                            className="unit"
+                            onChange={(e) => {
+                                this.state.unitcredit = e.target.value;
+                            }
+                            }
+                        />
+                        <AvField
+                            label="Unit coefficient"
+                            type="text"
+                            name="unitcoeficient"
+                            data-id={idx}
+                            value={dispUnit.unitcoeficient}
+                            className="unit"
+                            onChange={(e) => {
+                                this.state.editedUnits.unitcoeficient = e.target.value;
+                            }
+                            }
+                        />
+                        <AvField
+                            label="Unit nature"
+                            placeholder="enter unit nature"
+                            type="text"
+                            name="unitNature"
+                            data-id={idx}
+                            value={dispUnit.unitNature}
+                            className="unit"
+                            onChange={(e) => {
+                                this.state.editedUnits.unitNature = e.target.value;
+                            }
+                            }
+                        />
+                        <AvField
+                            label="Unit regimen"
+                            type="text"
+                            name="unitRegimen"
+                            data-id={idx}
+                            value={dispUnit.unitRegimen}
+                            className="unit"
+                            onChange={(e) => {
+                                this.state.editedUnits.unitRegimen = e.target.value;
+                            }
+                            }
+                        />
+                    </div>
+
+                )
+            }
+        })
+        let Subjectz = Object.values(this.state.EditDegree.subject).map((Subjecz, idx) => {
+            if (Subjecz.unit_id === this.state.editSelects.select2) {
+                    this.state.editedSubjects.idsubject = Subjecz.idsubject;
+                return (<div className="card card-primary">
+                    <div className="card-header">{"subject number :" + (idx + 1)}</div>
+                    <div className="card-body">
+                        <AvField
+                            label="subject label"
+                            type="text"
+                            name="subjectlabel"
+                            data-id={idx}
+                            value={Subjecz.subjectlabel}
+                            className="subject"
+                            onChange={(e) => {
+                                let { editedSubjects } = this.state;
+                                editedSubjects.subjectlabel = e.target.value;
+                                this.setState({ editedSubjects });
+                            }
+                            }
+                        />
+                        <AvField
+                            label="subject credit"
+                            type="text"
+                            name="subjectcredit"
+                            data-id={idx}
+                            value={Subjecz.subjectcredit}
+                            className="subject"
+                            onChange={(e) => {
+                                let { editedSubjects } = this.state;
+                                editedSubjects.subjectcredit = e.target.value;
+                                this.setState({ editedSubjects });
+                            }
+                            }
+                        />
+                        <AvField
+                            label="subject coefficient"
+                            type="text"
+                            name="subjectCoefficient"
+                            data-id={idx}
+                            value={Subjecz.subjectCoefficient}
+                            className="subject"
+                            onChange={(e) => {
+                                let { editedSubjects } = this.state;
+                                editedSubjects.subjectCoefficient = e.target.value;
+                                this.setState({ editedSubjects });
+                            }
+                            }
+                        />
+                        <AvField
+                            label="subject regimen"
+                            type="text"
+                            name="subjectRegimen"
+                            data-id={idx}
+                            value={Subjecz.subjectRegimen}
+                            className="subject"
+                            onChange={(e) => {
+                                let { editedSubjects } = this.state;
+                                editedSubjects.subjectRegimen = e.target.value;
+                                this.setState({ editedSubjects });
+                            }
+                            }
+                        />
+                    </div>
+                </div>
+                )
+            }
         })
         return (
             <div>
@@ -632,7 +799,6 @@ export default class PForm extends Component {
                                             label="Degree label"
                                             placeholder="enter degree name"
                                             value={this.state.EditDegree.degreeLabel}
-
                                             onChange={(e) => {
                                                 console.log("something:", this.state.EditDegree);
                                                 let { EditDegree } = this.state;
@@ -647,36 +813,40 @@ export default class PForm extends Component {
                                             value={this.state.editSelects.select1}
                                             onChange={(e) => {
                                                 let { editSelects } = this.state;
-                                                editSelects.select1 = document.getElementById(e.target.value).value;
+                                                editSelects.select1 = e.target.value;
                                                 this.setState({ editSelects });
                                                 console.log(this.state.editSelects.select1)
                                             }
                                             }
                                         >
+                                            <option value=''></option>
                                             {Sessions}
                                         </AvField>
-                                        {this.state.editSelects.select1 !=='' &&(
-                                        <AvField
-                                             name="SelectUnit"
-                                             type="select"
-                                             label="Please select a unit"
-                                             value={this.state.editSelects.select2}
-                                             onChange={(e) => {
-                                                 let { editSelects } = this.state;
-                                                 editSelects.select2 = e.target.value;
-                                                 this.setState({ editSelects });
-                                                 console.log(this.state.editSelects.select2)
-                                             }
-                                             }
-                                        >
-                                            {Unitz}
-                                        </AvField>)}
-                                        {(
+                                        {this.state.editSelects.select1 !== '' && (
+                                            <AvField
+                                                name="SelectUnit"
+                                                type="select"
+                                                label="Please select a unit"
+                                                value={this.state.editSelects.select2}
+                                                onChange={(e) => {
+                                                    let { editSelects } = this.state;
+                                                    editSelects.select2 = e.target.value;
+                                                    this.setState({ editSelects });
+                                                    console.log(this.state.editSelects.select1)
+                                                }
+                                                }
+                                            >
+                                                <option value=''></option>
+                                                {Unitz}
+                                            </AvField>)}
+                                        {this.state.editSelects.select2 !== '' && (
                                             <div>
-                                                <Unit Units={Units}/>
+                                                {dispunits}
                                                 {Subjectz}
+                                                <br />
+                                                <Button onClick={this.Update.bind(this)}>Update</Button>
                                             </div>
-                                            )}
+                                        )}
                                     </AvForm>
                                 </div>
                             </div>
@@ -696,10 +866,6 @@ export default class PForm extends Component {
                                     <div className="card-header"><h3 className="card-title">Degrees</h3>
                                     </div>
                                     <div className="card-body">
-
-
-
-
                                         <table id="example2" className="table table-bordered table-hover" >
                                             <thead>
                                                 <tr>
@@ -725,11 +891,7 @@ export default class PForm extends Component {
                                                 </tr>
                                             </tfoot>
                                         </table>
-
-
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
