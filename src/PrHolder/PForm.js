@@ -51,7 +51,8 @@ export default class PForm extends Component {
         },
         editSelects: {
             select1: '',
-            select2: ''
+            select2: '',
+            select3: ''
         },
         Degrees: [],
         Models: [],
@@ -109,7 +110,12 @@ export default class PForm extends Component {
     }
     toggleeditDegreeModal() {
         this.setState({
+            editSelects: {
+                select1: '',
+                select2: ''
+            },
             EditDegreeModal: !this.state.EditDegreeModal,
+            
         });
     }
     componentDidMount() {
@@ -142,9 +148,6 @@ export default class PForm extends Component {
         this.setState({
             EditDegree: DegreeData,
         })
-        console.log(DegreeData)
-        console.log(this.state.EditDegree);
-        console.log(Degree);
         this.toggleeditDegreeModal();
     }
     //adding units
@@ -153,7 +156,6 @@ export default class PForm extends Component {
         let Units = [...this.state.Units]
         Units[e.target.dataset.id][name] = value;
         this.setState({ Units });
-        console.log(Units);
     }
     addUnit = (e) => {
         this.setState((prevState) => ({
@@ -173,7 +175,6 @@ export default class PForm extends Component {
         this.setState((prevState) => ({
             Subjects: [...prevState.Subjects, { subjectlabel: '', subjectcredit: '', subjectCoefficient: '', subjectRegimen: '', unit_id: this.state.unitId }],
         }));
-        console.log("after being added ", this.state.Subjects)
     }
     async addSessions() {
         let i;
@@ -184,7 +185,6 @@ export default class PForm extends Component {
                 Degree_id: this.state.degreeId
             }).then((response) => {
                 this.state.Session.push(response.data.idSession);
-                console.log(this.state.Session);
             }).catch(error => {
                 console.log(error)
             })
@@ -195,16 +195,12 @@ export default class PForm extends Component {
         let { Degree } = this.state;
         Degree.Model_id = this.state.ModelData.id;
         this.setState({ Degree });
-        console.log(Degree);
         axios.post('http://pfe.tn/degree', this.state.Degree).then((response) => {
-            console.log(response)
-            console.log(response.data.idDegree)
             this.setState({
                 addedDegree: true,
                 degreeId: response.data.idDegree,
             });
             this.addSessions();
-
         });
     }
     addDegree() {
@@ -233,18 +229,14 @@ export default class PForm extends Component {
     }
     //Saves the unit when called
     async SaveUnit() {
-        console.log(this.state.Session);
         let { Units } = this.state;
         Units[0].Session_id = this.state.Session[this.state.currentSession];
         this.setState({ Units });
-        console.log("this is the unit ", Units[0]);
         await axios.post('http://pfe.tn/unit', Units[0]).then((response) => {
-            console.log(response);
             this.setState({ addedUnit: true });
             this.setState({
                 unitId: response.data.idunit
             })
-            console.log(this.state.unitId)
         });
     }
     //Saves subjects
@@ -254,10 +246,7 @@ export default class PForm extends Component {
         Subjects[0].unit_id = this.state.unitId;
         this.setState({ Subjects });
         for (i = 0; i < this.state.Subjects.length; i++) {
-            console.log("inside loop: ", this.state.Subjects);
-            console.log("this it after adding unit id ", this.state.Subjects[i]);
             axios.post('http://pfe.tn/subject', this.state.Subjects[i]).then((response) => {
-                console.log(response);
             })
         }
     }
@@ -275,8 +264,6 @@ export default class PForm extends Component {
         else if (this.state.UnitCounter === parseInt(this.state.ModelData.nb_units)) {
             alert('The maximum number of sessions set by the designer is' + this.state.ModelData.nb_units);
         }
-        console.log(this.state.UnitCounter);
-        console.log(this.state.ModelData.nb_units);
     }
     //Moves into the next session if it's still under the limit
     NextSession() {
@@ -312,7 +299,6 @@ export default class PForm extends Component {
             this.setState({
                 Degrees: response.data._embedded.degree,
             })
-
         });
     }
     //Cancels
@@ -341,51 +327,52 @@ export default class PForm extends Component {
         await axios.put('http://pfe.tn/degree/'+this.state.EditDegree.idDegree,{
             degreeLabel:this.state.EditDegree.degreeLabel
         }).then((response)=>{
-            console.log(response);
         })
         await axios.put('http://pfe.tn/unit/'+ this.state.editedUnits.idunit, this.state.editedUnits).then((response)=>{
-            console.log(response);
         }
         )
         await axios.put('http://pfe.tn/subject/'+this.state.editedSubjects.idsubject, this.state.editedSubjects).then((response)=>{
-            console.log(response);
             this._refreshDegrees();
             this.toggleeditDegreeModal();
             this.setState({
+                editSelects: {
+                    select1: '',
+                    select2: ''
+                },
                 editedSubjects: {
-                    EditDegree: {
-                        idDegree: '',
-                        Model_id: '',
-                        degreeLabel: '',
-                        MetaModelsWorker_id: '',
-                        MetaContext_id: '',
-                        LabelMetaProcess: '',
-                        DescMetaProcess: '',
-                        model_type: '',
-                        Field: '',
-                        Mention: '',
-                        Specialty: '',
-                        Nb_years: '',
-                        Calendar_sys: '',
-                        nb_units: '',
-                        credit: '',
-                        session: [],
-                        Unit: [],
-                        subject: []
-                    },
-                    editedUnits: {
-                        idunit: '',
-                        unitLabel: '',
-                        unitcredit: '',
-                        unitcoeficient: '',
-                        unitNature: '',
-                        unitRegimen: '',
-                    },
                     idsubject: '',
                     subjectlabel: '',
                     subjectCoefficient: '',
                     subjectcredit: '',
                     subjectRegimen: '',
+                },
+                EditDegree: {
+                    idDegree: '',
+                    Model_id: '',
+                    degreeLabel: '',
+                    MetaModelsWorker_id: '',
+                    MetaContext_id: '',
+                    LabelMetaProcess: '',
+                    DescMetaProcess: '',
+                    model_type: '',
+                    Field: '',
+                    Mention: '',
+                    Specialty: '',
+                    Nb_years: '',
+                    Calendar_sys: '',
+                    nb_units: '',
+                    credit: '',
+                    session: [],
+                    Unit: [],
+                    subject: []
+                },
+                editedUnits: {
+                    idunit: '',
+                    unitLabel: '',
+                    unitcredit: '',
+                    unitcoeficient: '',
+                    unitNature: '',
+                    unitRegimen: '',
                 },
             })
         })
@@ -450,14 +437,14 @@ export default class PForm extends Component {
         })
         let dispunits = Object.values(this.state.EditDegree.Unit).map((dispUnit, idx) => {
             if (dispUnit.idunit === this.state.editSelects.select2) {
-                this.state.editedUnits.idunit = dispUnit.idunit;
+                this.state.editedUnits = dispUnit;
+                console.log(this.state.editedUnits)
                 return (
                     <div className="card-body">
                         <AvField
                             label="Unit label"
                             type="text"
                             name="unitLabel"
-                            data-id={idx}
                             value={dispUnit.unitLabel}
                             className="unit"
                             onChange={(e) => {
@@ -470,11 +457,10 @@ export default class PForm extends Component {
                             label="Unit credit"
                             type="text"
                             name="unitcredit"
-                            data-id={idx}
                             value={dispUnit.unitcredit}
                             className="unit"
                             onChange={(e) => {
-                                this.state.unitcredit = e.target.value;
+                                this.state.editedUnits.unitcredit = e.target.value;
                             }
                             }
                         />
@@ -482,7 +468,6 @@ export default class PForm extends Component {
                             label="Unit coefficient"
                             type="text"
                             name="unitcoeficient"
-                            data-id={idx}
                             value={dispUnit.unitcoeficient}
                             className="unit"
                             onChange={(e) => {
@@ -495,7 +480,6 @@ export default class PForm extends Component {
                             placeholder="enter unit nature"
                             type="text"
                             name="unitNature"
-                            data-id={idx}
                             value={dispUnit.unitNature}
                             className="unit"
                             onChange={(e) => {
@@ -520,9 +504,16 @@ export default class PForm extends Component {
                 )
             }
         })
+        let dispSubjects =  Object.values(this.state.EditDegree.subject).map((Subject, idx) => {
+            if (Subject.unit_id === this.state.editSelects.select2){
+                return(
+                    <option key={Subject.idsubject} value={Subject.idsubject} label={Subject.subjectlabel}/>
+                )
+            }
+        })
         let Subjectz = Object.values(this.state.EditDegree.subject).map((Subjecz, idx) => {
-            if (Subjecz.unit_id === this.state.editSelects.select2) {
-                    this.state.editedSubjects.idsubject = Subjecz.idsubject;
+            if (Subjecz.idsubject === this.state.editSelects.select3) {
+                    this.state.editedSubjects = Subjecz;
                 return (<div className="card card-primary">
                     <div className="card-header">{"subject number :" + (idx + 1)}</div>
                     <div className="card-body">
@@ -530,7 +521,6 @@ export default class PForm extends Component {
                             label="subject label"
                             type="text"
                             name="subjectlabel"
-                            data-id={idx}
                             value={Subjecz.subjectlabel}
                             className="subject"
                             onChange={(e) => {
@@ -544,7 +534,6 @@ export default class PForm extends Component {
                             label="subject credit"
                             type="text"
                             name="subjectcredit"
-                            data-id={idx}
                             value={Subjecz.subjectcredit}
                             className="subject"
                             onChange={(e) => {
@@ -558,7 +547,6 @@ export default class PForm extends Component {
                             label="subject coefficient"
                             type="text"
                             name="subjectCoefficient"
-                            data-id={idx}
                             value={Subjecz.subjectCoefficient}
                             className="subject"
                             onChange={(e) => {
@@ -572,7 +560,6 @@ export default class PForm extends Component {
                             label="subject regimen"
                             type="text"
                             name="subjectRegimen"
-                            data-id={idx}
                             value={Subjecz.subjectRegimen}
                             className="subject"
                             onChange={(e) => {
@@ -716,8 +703,6 @@ export default class PForm extends Component {
                                                             this.setState({
                                                                 ModelData: response.data[0]
                                                             })
-                                                            console.log(this.state.formData.select5)
-                                                            console.log("this is da model:", this.state.ModelData)
                                                             this.SessionNumber();
                                                         })
                                                 }
@@ -800,7 +785,6 @@ export default class PForm extends Component {
                                             placeholder="enter degree name"
                                             value={this.state.EditDegree.degreeLabel}
                                             onChange={(e) => {
-                                                console.log("something:", this.state.EditDegree);
                                                 let { EditDegree } = this.state;
                                                 EditDegree.degreeLabel = e.target.value;
                                                 this.setState({ EditDegree });
@@ -815,7 +799,6 @@ export default class PForm extends Component {
                                                 let { editSelects } = this.state;
                                                 editSelects.select1 = e.target.value;
                                                 this.setState({ editSelects });
-                                                console.log(this.state.editSelects.select1)
                                             }
                                             }
                                         >
@@ -832,7 +815,6 @@ export default class PForm extends Component {
                                                     let { editSelects } = this.state;
                                                     editSelects.select2 = e.target.value;
                                                     this.setState({ editSelects });
-                                                    console.log(this.state.editSelects.select1)
                                                 }
                                                 }
                                             >
@@ -842,10 +824,32 @@ export default class PForm extends Component {
                                         {this.state.editSelects.select2 !== '' && (
                                             <div>
                                                 {dispunits}
-                                                {Subjectz}
-                                                <br />
-                                                <Button onClick={this.Update.bind(this)}>Update</Button>
+                                                
                                             </div>
+                                        )}
+                                        {this.state.editSelects.select2 !== '' &&(
+                                            <AvField
+                                            name="Selectsubject"
+                                            type="select"
+                                            label="Please select a subject"
+                                            value={this.state.editSelects.select3}
+                                            onChange={(e) => {
+                                                let { editSelects } = this.state;
+                                                editSelects.select3 = e.target.value;
+                                                this.setState({ editSelects });
+                                            }
+                                            }
+                                        >
+                                            <option value=''/>
+                                            {dispSubjects}
+                                        </AvField>
+                                        )}
+                                        {this.state.editSelects.select3 !== '' &&(
+                                            <div>
+                                             {Subjectz}
+                                             <br />
+                                             <Button onClick={this.Update.bind(this)}>Update</Button>
+                                             </div>
                                         )}
                                     </AvForm>
                                 </div>
